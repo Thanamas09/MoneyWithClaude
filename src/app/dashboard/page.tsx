@@ -1,0 +1,143 @@
+'use client'
+import { useFinance } from '@/lib/FinanceContext'
+import { formatCurrency } from '@/lib/constants'
+import WalletCard from '@/components/WalletCard'
+import TransactionRow from '@/components/TransactionRow'
+
+function StatCard({
+  label,
+  amount,
+  color = '#111827',
+  bg = '#FFFFFF',
+  dot,
+}: {
+  label: string
+  amount: number
+  color?: string
+  bg?: string
+  dot?: string
+}) {
+  return (
+    <div
+      className="rounded-xl px-6 py-5"
+      style={{
+        background: bg,
+        border: '1px solid #E5E7EB',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+      }}
+    >
+      <div className="flex items-center justify-between mb-2">
+        <span
+          className="text-[13px] font-[500] uppercase tracking-[0.05em]"
+          style={{ color: '#6B7280' }}
+        >
+          {label}
+        </span>
+        {dot && (
+          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: dot }} />
+        )}
+      </div>
+      <p className="text-[24px] font-[700]" style={{ color }}>
+        {formatCurrency(amount)}
+      </p>
+    </div>
+  )
+}
+
+export default function DashboardPage() {
+  const { wallets, totalBalance, transactions, deleteTransaction } = useFinance()
+
+  const today        = new Date().toISOString().slice(0, 10)
+  const currentMonth = today.slice(0, 7)
+
+  const todayTxs   = transactions.filter(t => t.date === today)
+  const monthTxs   = transactions.filter(t => t.date.startsWith(currentMonth))
+  const monthIn    = monthTxs.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0)
+  const monthOut   = monthTxs.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0)
+
+  const todayLabel = new Date().toLocaleDateString('th-TH', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  })
+
+  return (
+    <div className="p-8 space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-[20px] font-[600] text-[#111827]">สรุปการเงิน</h1>
+        <p className="text-[14px] text-[#6B7280] mt-1">{todayLabel}</p>
+      </div>
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-3 gap-4">
+        <StatCard
+          label="ยอดรวมทั้งหมด"
+          amount={totalBalance}
+          color="#111827"
+          dot="#6366F1"
+        />
+        <StatCard
+          label="รายรับเดือนนี้"
+          amount={monthIn}
+          color="#16A34A"
+          bg="#F0FDF4"
+          dot="#16A34A"
+        />
+        <StatCard
+          label="รายจ่ายเดือนนี้"
+          amount={monthOut}
+          color="#DC2626"
+          bg="#FEF2F2"
+          dot="#DC2626"
+        />
+      </div>
+
+      {/* Wallets */}
+      <div>
+        <p
+          className="text-[13px] font-[500] uppercase tracking-[0.05em] mb-4"
+          style={{ color: '#6B7280' }}
+        >
+          กระเป๋าเงิน
+        </p>
+        <div className="grid grid-cols-3 gap-4">
+          {wallets.map(w => <WalletCard key={w.id} wallet={w} />)}
+        </div>
+      </div>
+
+      {/* Today's transactions */}
+      <div>
+        <p
+          className="text-[13px] font-[500] uppercase tracking-[0.05em] mb-4"
+          style={{ color: '#6B7280' }}
+        >
+          รายการวันนี้
+        </p>
+
+        {todayTxs.length === 0 ? (
+          <div
+            className="rounded-xl py-16 flex flex-col items-center justify-center gap-3"
+            style={{ border: '1px solid #E5E7EB', background: '#FFFFFF' }}
+          >
+            <span className="text-[48px]">📭</span>
+            <p className="text-[16px] font-[500] text-[#6B7280]">ยังไม่มีรายการ</p>
+            <p className="text-[14px] text-[#9CA3AF]">เริ่มบันทึกรายการแรกได้เลย</p>
+          </div>
+        ) : (
+          <div
+            className="rounded-xl overflow-hidden"
+            style={{ border: '1px solid #E5E7EB', background: '#FFFFFF' }}
+          >
+            {todayTxs.map((tx, i) => (
+              <TransactionRow
+                key={tx.id}
+                transaction={tx}
+                onDelete={deleteTransaction}
+                isLast={i === todayTxs.length - 1}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
