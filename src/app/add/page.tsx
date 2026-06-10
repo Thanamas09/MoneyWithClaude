@@ -2,7 +2,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useFinance } from '@/lib/FinanceContext'
-import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '@/lib/constants'
 
 type TxType = 'expense' | 'income' | 'transfer'
 
@@ -35,7 +34,7 @@ function FieldInput({ ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
 
 export default function AddPage() {
   const router = useRouter()
-  const { wallets, addTransaction } = useFinance()
+  const { wallets, categories: allCategories, addTransaction } = useFinance()
 
   const [txType,     setTxType]     = useState<TxType>('expense')
   const [amount,     setAmount]     = useState('')
@@ -46,7 +45,7 @@ export default function AddPage() {
   const [time,       setTime]       = useState(now)
   const [note,       setNote]       = useState('')
 
-  const categories  = txType === 'expense' ? EXPENSE_CATEGORIES : INCOME_CATEGORIES
+  const categories = allCategories.filter(c => c.type === txType)
   const canSubmit   = !!amount && parseFloat(amount) > 0 && !!walletId && (txType === 'transfer' || !!categoryId)
 
   const handleTypeChange = (t: TxType) => { setTxType(t); setCategoryId('') }
@@ -71,7 +70,7 @@ export default function AddPage() {
       <h1 className="text-[20px] font-[600] text-[#111827] mb-6">บันทึกรายการ</h1>
 
       <div
-        className="rounded-xl p-6 max-w-[560px] space-y-6"
+        className="rounded-xl p-6 space-y-6"
         style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
       >
         {/* Type toggle */}

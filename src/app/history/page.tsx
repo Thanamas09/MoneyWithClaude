@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { useFinance, NewTransaction } from '@/lib/FinanceContext'
-import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, formatCurrency } from '@/lib/constants'
+import { formatCurrency } from '@/lib/constants'
 import { Transaction } from '@/lib/supabase/types'
 import TransactionRow from '@/components/TransactionRow'
 import { format } from 'date-fns'
@@ -43,7 +43,7 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function HistoryPage() {
-  const { wallets, transactions, deleteTransaction, updateTransaction } = useFinance()
+  const { wallets, categories: allCategories, transactions, deleteTransaction, updateTransaction } = useFinance()
 
   const [search,       setSearch]       = useState('')
   const [walletFilter, setWalletFilter] = useState('all')
@@ -114,7 +114,7 @@ export default function HistoryPage() {
     setEditTx(null)
   }
 
-  const editCategories = form.type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES
+  const editCategories = allCategories.filter(c => c.type === form.type)
 
   return (
     <div className="p-8 space-y-6">

@@ -1,7 +1,8 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Home, PlusCircle, List, BarChart2, Wallet, Calculator } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Home, PlusCircle, List, BarChart2, Wallet, Calculator, Settings, LogOut } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 const navItems = [
   { href: '/dashboard',  label: 'หน้าหลัก',   icon: Home },
@@ -10,10 +11,19 @@ const navItems = [
   { href: '/monthly',    label: 'รายเดือน',    icon: BarChart2 },
   { href: '/wallets',    label: 'กระเป๋าเงิน', icon: Wallet },
   { href: '/calculator', label: 'คำนวณ',       icon: Calculator },
+  { href: '/settings',   label: 'ตั้งค่า',     icon: Settings },
 ]
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const router   = useRouter()
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
+    router.refresh()
+  }
 
   return (
     <aside
@@ -54,8 +64,15 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-6 py-4" style={{ borderTop: '1px solid #E5E7EB' }}>
-        <p className="text-[12px] text-[#9CA3AF]">FinTrack v1.0</p>
+      <div className="px-4 py-4 space-y-3" style={{ borderTop: '1px solid #E5E7EB' }}>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-2.5 h-10 px-3 rounded-lg text-[13px] font-[500] transition-colors text-[#6B7280] hover:text-[#DC2626] hover:bg-[#FEF2F2]"
+        >
+          <LogOut size={16} strokeWidth={1.8} />
+          ออกจากระบบ
+        </button>
+        <p className="text-[11px] text-[#D1D5DB] px-3">FinTrack v1.0</p>
       </div>
     </aside>
   )

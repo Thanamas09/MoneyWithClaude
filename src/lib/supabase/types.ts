@@ -10,6 +10,7 @@ export interface Wallet {
 
 export interface Category {
   id: string
+  user_id?: string
   name: string
   type: 'income' | 'expense'
   icon: string
@@ -28,7 +29,7 @@ export interface Transaction {
   date: string
   time?: string
   created_at: string
-  // joined display fields (snapshot at record time)
+  // joined display fields (enriched at load time)
   wallet?: MockWallet
   to_wallet?: MockWallet
   category?: Category
@@ -43,4 +44,19 @@ export interface MockWallet {
   bg?: string
   user_id?: string
   created_at?: string
+}
+
+export interface NewWallet {
+  name: string
+  icon: string
+  color: string
+  bg: string
+  balance: number
+}
+
+export interface NewCategory {
+  name: string
+  type: 'income' | 'expense'
+  icon: string
+  color: string
 }
