@@ -1,9 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/history/page": "app/history/page.js",
-  "/monthly/page": "app/monthly/page.js",
-  "/add/page": "app/add/page.js",
-  "/wallets/page": "app/wallets/page.js",
-  "/calculator/page": "app/calculator/page.js"
-}
