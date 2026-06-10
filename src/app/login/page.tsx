@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
@@ -46,9 +47,9 @@ export default function LoginPage() {
         <div
           className="rounded-2xl p-8 space-y-5"
           style={{
-            background:  '#FFFFFF',
-            border:      '1px solid #E5E7EB',
-            boxShadow:   '0 1px 3px rgba(0,0,0,0.08)',
+            background: '#FFFFFF',
+            border:     '1px solid #E5E7EB',
+            boxShadow:  '0 1px 3px rgba(0,0,0,0.08)',
           }}
         >
           <h2 className="text-[18px] font-[600] text-[#111827]">เข้าสู่ระบบ</h2>
@@ -91,11 +92,7 @@ export default function LoginPage() {
             {error && (
               <p
                 className="text-[13px] rounded-lg px-3 py-2"
-                style={{
-                  color:      '#DC2626',
-                  background: '#FEF2F2',
-                  border:     '1px solid #FECACA',
-                }}
+                style={{ color: '#DC2626', background: '#FEF2F2', border: '1px solid #FECACA' }}
               >
                 {error}
               </p>
@@ -112,6 +109,23 @@ export default function LoginPage() {
             </button>
 
           </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px" style={{ background: '#E5E7EB' }} />
+            <span className="text-[12px] text-[#9CA3AF]">หรือ</span>
+            <div className="flex-1 h-px" style={{ background: '#E5E7EB' }} />
+          </div>
+
+          {/* Register link */}
+          <Link
+            href="/register"
+            className="w-full h-11 rounded-lg text-[14px] font-[600] border flex items-center justify-center transition-colors"
+            style={{ color: '#6366F1', borderColor: '#6366F1', background: '#FFFFFF' }}
+          >
+            สมัครสมาชิกใหม่
+          </Link>
+
         </div>
       </div>
     </div>

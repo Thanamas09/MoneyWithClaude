@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useFinance } from '@/lib/FinanceContext'
 
@@ -44,6 +44,14 @@ export default function AddPage() {
   const [date,       setDate]       = useState(new Date().toISOString().slice(0, 10))
   const [time,       setTime]       = useState(now)
   const [note,       setNote]       = useState('')
+
+  // Sync wallet selection once wallets load from Supabase
+  useEffect(() => {
+    if (wallets.length > 0) {
+      setWalletId(id => id || wallets[0].id)
+      setToWalletId(id => id || (wallets[1]?.id ?? ''))
+    }
+  }, [wallets])
 
   const categories = allCategories.filter(c => c.type === txType)
   const canSubmit   = !!amount && parseFloat(amount) > 0 && !!walletId && (txType === 'transfer' || !!categoryId)

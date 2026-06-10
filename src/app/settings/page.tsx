@@ -474,7 +474,7 @@ export default function SettingsPage() {
 
       {/* Add wallet */}
       <Modal open={addWalletOpen} onClose={() => setAddWalletOpen(false)} title="เพิ่มกระเป๋า">
-        <WalletFields />
+        {WalletFields()}
         <ModalFooter
           onCancel={() => setAddWalletOpen(false)}
           onConfirm={handleAddWallet}
@@ -484,7 +484,7 @@ export default function SettingsPage() {
 
       {/* Edit wallet */}
       <Modal open={!!editWallet} onClose={() => setEditWallet(null)} title="แก้ไขกระเป๋า">
-        <WalletFields />
+        {WalletFields()}
         <ModalFooter
           onCancel={() => setEditWallet(null)}
           onConfirm={handleEditWallet}
@@ -513,7 +513,7 @@ export default function SettingsPage() {
         onClose={() => setAddCatType(null)}
         title={addCatType === 'expense' ? 'เพิ่มหมวดหมู่รายจ่าย' : 'เพิ่มหมวดหมู่รายรับ'}
       >
-        <CatFields />
+        {CatFields()}
         <ModalFooter
           onCancel={() => setAddCatType(null)}
           onConfirm={handleAddCat}

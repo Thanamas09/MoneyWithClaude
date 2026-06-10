@@ -1,5 +1,6 @@
 'use client'
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react'
+import type { Session } from '@supabase/supabase-js'
 import { MockWallet, Transaction, Category, NewWallet, NewCategory } from './supabase/types'
 import { WALLETS_CONFIG } from './constants'
 import { createClient } from './supabase/client'
@@ -46,6 +47,8 @@ interface FinanceContextType {
   totalBalance: number
   loading:      boolean
   categories:   Category[]
+  displayName:  string
+  userId:       string
   // wallet CRUD
   addWallet:    (data: NewWallet) => Promise<void>
   updateWallet: (id: string, updates: Partial<MockWallet>) => Promise<void>
@@ -125,51 +128,63 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
   const [categories,   setCategories]   = useState<Category[]>([])
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading,      setLoading]      = useState(true)
+  const [displayName,  setDisplayName]  = useState('')
+  const [userId,       setUserId]       = useState('')
 
   useEffect(() => {
-    let cancelled = false
+    // Track in-flight loads so a new auth event can cancel a stale one
+    let currentLoad: { cancelled: boolean } | null = null
 
-    async function load() {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session || cancelled) { setLoading(false); return }
+    async function loadForSession(session: Session) {
+      if (currentLoad) currentLoad.cancelled = true
+      const thisLoad = { cancelled: false }
+      currentLoad = thisLoad
 
-      const userId = session.user.id
+      setLoading(true)
+
+      const uid  = session.user.id
+      const name = (session.user.user_metadata?.display_name as string | undefined)
+        ?? session.user.email?.split('@')[0]
+        ?? 'ผู้ใช้'
+
+      if (!thisLoad.cancelled) {
+        setUserId(uid)
+        setDisplayName(name)
+      }
 
       // ── wallets ──────────────────────────────────────────────
       const { data: walletRows } = await supabase
         .from('wallets').select('*').order('created_at')
+      if (thisLoad.cancelled) return
 
       let loadedWallets: MockWallet[] = []
-
       if (walletRows !== null && walletRows.length === 0) {
         const { data: seeded } = await supabase
           .from('wallets')
-          .insert(SEED_WALLETS.map(w => ({ ...w, user_id: userId })))
+          .insert(SEED_WALLETS.map(w => ({ ...w, user_id: uid })))
           .select()
-        if (seeded) loadedWallets = seeded as MockWallet[]
+        if (seeded && !thisLoad.cancelled) loadedWallets = seeded as MockWallet[]
       } else if (walletRows) {
         loadedWallets = walletRows as MockWallet[]
       }
-
-      if (!cancelled) setWallets(loadedWallets)
+      if (!thisLoad.cancelled) setWallets(loadedWallets)
 
       // ── categories ───────────────────────────────────────────
       const { data: catRows } = await supabase
         .from('categories').select('*').order('created_at')
+      if (thisLoad.cancelled) return
 
       let loadedCats: Category[] = []
-
       if (catRows !== null && catRows.length === 0) {
         const { data: seededCats } = await supabase
           .from('categories')
-          .insert(SEED_CATEGORIES.map(c => ({ ...c, user_id: userId })))
+          .insert(SEED_CATEGORIES.map(c => ({ ...c, user_id: uid })))
           .select()
-        if (seededCats) loadedCats = seededCats as Category[]
+        if (seededCats && !thisLoad.cancelled) loadedCats = seededCats as Category[]
       } else if (catRows) {
         loadedCats = catRows as Category[]
       }
-
-      if (!cancelled) setCategories(loadedCats)
+      if (!thisLoad.cancelled) setCategories(loadedCats)
 
       // ── transactions ─────────────────────────────────────────
       const { data: txRows } = await supabase
@@ -177,16 +192,39 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
         .select('*')
         .order('date',       { ascending: false })
         .order('created_at', { ascending: false })
+      if (thisLoad.cancelled) return
 
-      if (txRows && !cancelled) {
-        setTransactions(txRows.map(r => enrichTx(r, loadedWallets, loadedCats)))
-      }
-
-      if (!cancelled) setLoading(false)
+      if (txRows) setTransactions(txRows.map(r => enrichTx(r, loadedWallets, loadedCats)))
+      if (!thisLoad.cancelled) setLoading(false)
     }
 
-    load()
-    return () => { cancelled = true }
+    function clearState() {
+      if (currentLoad) currentLoad.cancelled = true
+      setWallets([])
+      setCategories([])
+      setTransactions([])
+      setDisplayName('')
+      setUserId('')
+      setLoading(false)
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_OUT' || !session) {
+          clearState()
+          return
+        }
+        if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+          await loadForSession(session)
+        }
+        // TOKEN_REFRESHED: session is already valid, no reload needed
+      }
+    )
+
+    return () => {
+      if (currentLoad) currentLoad.cancelled = true
+      subscription.unsubscribe()
+    }
   }, [supabase])
 
   const totalBalance = wallets.reduce((s, w) => s + w.balance, 0)
@@ -335,7 +373,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <FinanceContext.Provider value={{
-      wallets, totalBalance, loading, categories,
+      wallets, totalBalance, loading, categories, displayName, userId,
       addWallet, updateWallet, deleteWallet,
       transactions, addTransaction, deleteTransaction, updateTransaction,
       addCategory, deleteCategory,

@@ -1,4 +1,6 @@
 'use client'
+import { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
 import { useFinance } from '@/lib/FinanceContext'
 import { formatCurrency } from '@/lib/constants'
 import WalletCard from '@/components/WalletCard'
@@ -45,15 +47,26 @@ function StatCard({
 }
 
 export default function DashboardPage() {
-  const { wallets, totalBalance, transactions, deleteTransaction } = useFinance()
+  const { wallets, totalBalance, transactions, deleteTransaction, displayName, userId, loading } = useFinance()
+
+  const [showWelcome, setShowWelcome] = useState(false)
+
+  useEffect(() => {
+    if (!userId || loading) return
+    const key = `mwc_welcomed_${userId}`
+    if (!localStorage.getItem(key)) {
+      setShowWelcome(true)
+      localStorage.setItem(key, '1')
+    }
+  }, [userId, loading])
 
   const today        = new Date().toISOString().slice(0, 10)
   const currentMonth = today.slice(0, 7)
 
-  const todayTxs   = transactions.filter(t => t.date === today)
-  const monthTxs   = transactions.filter(t => t.date.startsWith(currentMonth))
-  const monthIn    = monthTxs.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0)
-  const monthOut   = monthTxs.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0)
+  const todayTxs = transactions.filter(t => t.date === today)
+  const monthTxs = transactions.filter(t => t.date.startsWith(currentMonth))
+  const monthIn  = monthTxs.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0)
+  const monthOut = monthTxs.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0)
 
   const todayLabel = new Date().toLocaleDateString('th-TH', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
@@ -61,6 +74,26 @@ export default function DashboardPage() {
 
   return (
     <div className="p-8 space-y-8">
+
+      {/* Welcome banner — shown once per user */}
+      {showWelcome && (
+        <div
+          className="flex items-center justify-between rounded-xl px-5 py-4"
+          style={{ background: '#EEF2FF', border: '1px solid #C7D2FE' }}
+        >
+          <p className="text-[14px] font-[500]" style={{ color: '#4338CA' }}>
+            🎉 ยินดีต้อนรับ <strong>{displayName}</strong>! เริ่มบันทึกรายรับรายจ่ายได้เลย
+          </p>
+          <button
+            onClick={() => setShowWelcome(false)}
+            className="w-7 h-7 flex items-center justify-center rounded-lg transition-colors"
+            style={{ color: '#6366F1' }}
+          >
+            <X size={15} strokeWidth={2} />
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div>
         <h1 className="text-[20px] font-[600] text-[#111827]">สรุปการเงิน</h1>

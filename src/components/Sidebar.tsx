@@ -19,6 +19,10 @@ export default function Sidebar() {
   const router   = useRouter()
 
   const handleLogout = async () => {
+    // Clear all app localStorage keys so the next user starts clean
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('mwc_'))
+      .forEach(k => localStorage.removeItem(k))
     const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/login')
