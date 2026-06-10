@@ -15,7 +15,7 @@ const SEED_WALLETS = WALLETS_CONFIG.map(w => ({
   balance: 0,
 }))
 
-const SEED_CATEGORIES: Omit<NewCategory, never>[] = [
+const SEED_CATEGORIES: NewCategory[] = [
   { name: 'อาหาร',       type: 'expense', icon: '🍔', color: '#EF9F27' },
   { name: 'เดินทาง',     type: 'expense', icon: '🚌', color: '#378ADD' },
   { name: 'ช้อปปิ้ง',    type: 'expense', icon: '🛍', color: '#D4537E' },
@@ -96,7 +96,7 @@ function applyDeltas(wallets: MockWallet[], deltas: DeltaEntry[]): MockWallet[] 
   })
 }
 
-function enrichTx(raw: any, wallets: MockWallet[], cats: Category[]): Transaction { // eslint-disable-line
+function enrichTx(raw: Transaction, wallets: MockWallet[], cats: Category[]): Transaction {
   return {
     ...raw,
     wallet:    wallets.find(w => w.id === raw.wallet_id),
@@ -154,7 +154,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
 
       // ── wallets ──────────────────────────────────────────────
       const { data: walletRows } = await supabase
-        .from('wallets').select('*').order('created_at')
+        .from('wallets').select('*').eq('user_id', uid).order('created_at')
       if (thisLoad.cancelled) return
 
       let loadedWallets: MockWallet[] = []
@@ -171,7 +171,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
 
       // ── categories ───────────────────────────────────────────
       const { data: catRows } = await supabase
-        .from('categories').select('*').order('created_at')
+        .from('categories').select('*').eq('user_id', uid).order('created_at')
       if (thisLoad.cancelled) return
 
       let loadedCats: Category[] = []
@@ -190,6 +190,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
       const { data: txRows } = await supabase
         .from('transactions')
         .select('*')
+        .eq('user_id', uid)
         .order('date',       { ascending: false })
         .order('created_at', { ascending: false })
       if (thisLoad.cancelled) return

@@ -96,7 +96,7 @@ export default function HistoryPage() {
   const handleTypeChange = (t: TxType) => setForm(f => ({ ...f, type: t, categoryId: '' }))
 
   const saveEdit = () => {
-    if (!editTx) return
+    if (!editTx || !canSaveEdit) return
     const amt = parseFloat(form.amount)
     if (!amt || amt <= 0) return
     const update: NewTransaction = {
@@ -115,6 +115,12 @@ export default function HistoryPage() {
   }
 
   const editCategories = allCategories.filter(c => c.type === form.type)
+
+  const canSaveEdit = !!form.amount && parseFloat(form.amount) > 0 && !!form.walletId && (
+    form.type === 'transfer'
+      ? !!form.toWalletId && form.toWalletId !== form.walletId
+      : !!form.categoryId
+  )
 
   return (
     <div className="p-8 space-y-6">
@@ -382,7 +388,8 @@ export default function HistoryPage() {
               </button>
               <button
                 onClick={saveEdit}
-                className="flex-1 h-11 rounded-lg text-[14px] font-[600] text-white transition-opacity"
+                disabled={!canSaveEdit}
+                className="flex-1 h-11 rounded-lg text-[14px] font-[600] text-white transition-opacity disabled:opacity-40"
                 style={{ background: '#6366F1' }}
               >
                 บันทึก

@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useFinance } from '@/lib/FinanceContext'
 import { formatCurrency } from '@/lib/constants'
 
@@ -22,7 +22,15 @@ function SectionCard({ title, children }: { title: string; children: React.React
 export default function CalculatorPage() {
   const { wallets } = useFinance()
 
-  const [selected,     setSelected]     = useState<Set<string>>(() => new Set(wallets.map(w => w.id)))
+  const [selected,     setSelected]     = useState<Set<string>>(new Set())
+  const initialized = useRef(false)
+
+  useEffect(() => {
+    if (!initialized.current && wallets.length > 0) {
+      setSelected(new Set(wallets.map(w => w.id)))
+      initialized.current = true
+    }
+  }, [wallets])
   const [adjustMode,   setAdjustMode]   = useState<'add' | 'subtract'>('subtract')
   const [adjustAmount, setAdjustAmount] = useState('')
   const [days,         setDays]         = useState('')

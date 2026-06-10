@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Sidebar from '@/components/Sidebar'
+import AppShell from '@/components/AppShell'
 import { FinanceProvider } from '@/lib/FinanceContext'
 
 const inter = Inter({
@@ -28,12 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <FinanceProvider>
-          <div className="flex min-h-screen">
-            <Sidebar />
-            <main className="flex-1 ml-[240px] min-h-screen bg-[#FAFAFA]">
-              {children}
-            </main>
-          </div>
+          <AppShell>{children}</AppShell>
         </FinanceProvider>
       </body>
     </html>

@@ -161,7 +161,7 @@ function ModalFooter({ onCancel, onConfirm, confirmLabel = 'บันทึก',
 
 export default function SettingsPage() {
   const {
-    wallets, categories, transactions,
+    wallets, categories,
     addWallet, updateWallet, deleteWallet,
     addCategory, deleteCategory,
   } = useFinance()

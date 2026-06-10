@@ -34,7 +34,7 @@ function FieldInput({ ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
 
 export default function AddPage() {
   const router = useRouter()
-  const { wallets, categories: allCategories, addTransaction } = useFinance()
+  const { wallets, categories: allCategories, addTransaction, loading } = useFinance()
 
   const [txType,     setTxType]     = useState<TxType>('expense')
   const [amount,     setAmount]     = useState('')
@@ -54,13 +54,22 @@ export default function AddPage() {
   }, [wallets])
 
   const categories = allCategories.filter(c => c.type === txType)
-  const canSubmit   = !!amount && parseFloat(amount) > 0 && !!walletId && (txType === 'transfer' || !!categoryId)
+  const canSubmit  = !!amount && parseFloat(amount) > 0 && !!walletId && (
+    txType === 'transfer'
+      ? !!toWalletId && toWalletId !== walletId
+      : !!categoryId
+  )
 
   const handleTypeChange = (t: TxType) => { setTxType(t); setCategoryId('') }
 
-  const handleSubmit = () => {
+  const handleWalletChange = (id: string) => {
+    setWalletId(id)
+    if (toWalletId === id) setToWalletId('')
+  }
+
+  const handleSubmit = async () => {
     if (!canSubmit) return
-    addTransaction({
+    await addTransaction({
       wallet_id:    walletId,
       to_wallet_id: txType === 'transfer' ? (toWalletId || null) : null,
       type:         txType,
@@ -71,6 +80,17 @@ export default function AddPage() {
       time:         time || undefined,
     })
     router.push('/history')
+  }
+
+  if (loading) {
+    return (
+      <div className="p-8 flex items-center justify-center min-h-[400px]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-[#6366F1] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[14px] text-[#9CA3AF]">กำลังโหลด...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -124,7 +144,7 @@ export default function AddPage() {
             {wallets.map(w => (
               <button
                 key={w.id}
-                onClick={() => setWalletId(w.id)}
+                onClick={() => handleWalletChange(w.id)}
                 className="flex items-center gap-1.5 px-3 h-8 rounded-full text-[12px] font-[500] border transition-all duration-150"
                 style={
                   walletId === w.id

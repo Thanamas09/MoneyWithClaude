@@ -60,6 +60,27 @@ export default function DashboardPage() {
     }
   }, [userId, loading])
 
+  if (loading) {
+    return (
+      <div className="p-8 space-y-8">
+        <div>
+          <div className="h-6 w-40 bg-[#F3F4F6] rounded animate-pulse" />
+          <div className="h-4 w-56 bg-[#F3F4F6] rounded animate-pulse mt-2" />
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {[0, 1, 2].map(i => (
+            <div key={i} className="h-24 rounded-xl bg-[#F3F4F6] animate-pulse" />
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {[0, 1, 2].map(i => (
+            <div key={i} className="h-28 rounded-xl bg-[#F3F4F6] animate-pulse" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const today        = new Date().toISOString().slice(0, 10)
   const currentMonth = today.slice(0, 7)
 
