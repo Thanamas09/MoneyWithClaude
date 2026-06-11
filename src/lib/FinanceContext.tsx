@@ -29,6 +29,80 @@ const SEED_CATEGORIES: NewCategory[] = [
   { name: 'อื่นๆ',       type: 'income',  icon: '➕', color: '#639922' },
 ]
 
+// ── demo ──────────────────────────────────────────────────────────────────────
+
+export const DEMO_EMAIL = 'demo@fintrack.app'
+
+const DEMO_WALLETS = [
+  { name: 'เงินสด', icon: '💵', color: '#16A34A', bg: '#16A34A15', balance: 500  },
+  { name: 'SCB',    icon: '🏦', color: '#2563EB', bg: '#2563EB15', balance: 8000 },
+  { name: 'K-push', icon: '📱', color: '#7C3AED', bg: '#7C3AED15', balance: 3200 },
+]
+
+type TxTemplate = {
+  date: string; type: 'income' | 'expense' | 'transfer'
+  amount: number; walletName: string; toWalletName?: string
+  catName?: string; note?: string; time?: string
+}
+
+const DEMO_TRANSACTIONS: TxTemplate[] = [
+  { date: '2026-04-01', type: 'income',   amount: 25000, walletName: 'SCB',    catName: 'เงินเดือน',   note: 'เงินเดือนเมษายน',    time: '09:00' },
+  { date: '2026-04-03', type: 'expense',  amount: 120,   walletName: 'เงินสด', catName: 'อาหาร',       note: 'ข้าวกลางวัน',         time: '12:30' },
+  { date: '2026-04-05', type: 'expense',  amount: 45,    walletName: 'K-push', catName: 'เดินทาง',      note: 'รถไฟฟ้า',             time: '08:15' },
+  { date: '2026-04-08', type: 'expense',  amount: 890,   walletName: 'SCB',    catName: 'ช้อปปิ้ง',     note: 'เสื้อผ้า',            time: '14:00' },
+  { date: '2026-04-10', type: 'expense',  amount: 85,    walletName: 'เงินสด', catName: 'อาหาร',       note: 'อาหารเย็น',           time: '19:00' },
+  { date: '2026-04-12', type: 'transfer', amount: 1000,  walletName: 'SCB',    toWalletName: 'เงินสด', note: 'ถอนเงินสด',           time: '11:00' },
+  { date: '2026-04-15', type: 'expense',  amount: 650,   walletName: 'SCB',    catName: 'สาธารณูปโภค',  note: 'ค่าไฟ + น้ำ',       time: '10:00' },
+  { date: '2026-04-18', type: 'expense',  amount: 200,   walletName: 'เงินสด', catName: 'อาหาร',       note: 'ข้าวกับเพื่อน',       time: '19:30' },
+  { date: '2026-04-22', type: 'income',   amount: 5000,  walletName: 'K-push', catName: 'ฟรีแลนซ์',    note: 'งานออกแบบ',           time: '16:00' },
+  { date: '2026-04-25', type: 'expense',  amount: 350,   walletName: 'SCB',    catName: 'บันเทิง',     note: 'ดูหนัง + ป๊อปคอร์น', time: '20:00' },
+  { date: '2026-05-01', type: 'income',   amount: 25000, walletName: 'SCB',    catName: 'เงินเดือน',   note: 'เงินเดือนพฤษภาคม',   time: '09:00' },
+  { date: '2026-05-04', type: 'expense',  amount: 150,   walletName: 'เงินสด', catName: 'อาหาร',       note: 'ข้าวกลางวัน',         time: '12:00' },
+  { date: '2026-05-07', type: 'expense',  amount: 60,    walletName: 'K-push', catName: 'เดินทาง',      note: 'Grab',                time: '08:00' },
+  { date: '2026-05-10', type: 'expense',  amount: 1200,  walletName: 'SCB',    catName: 'สุขภาพ',      note: 'ตรวจสุขภาพ',          time: '10:30' },
+  { date: '2026-05-12', type: 'expense',  amount: 95,    walletName: 'เงินสด', catName: 'อาหาร',       note: 'อาหารเช้า + กาแฟ',   time: '08:30' },
+  { date: '2026-05-15', type: 'transfer', amount: 2000,  walletName: 'SCB',    toWalletName: 'K-push', note: 'โอนเข้า K-push',      time: '13:00' },
+  { date: '2026-05-18', type: 'expense',  amount: 1500,  walletName: 'SCB',    catName: 'ช้อปปิ้ง',     note: 'รองเท้า',             time: '15:00' },
+  { date: '2026-05-20', type: 'expense',  amount: 180,   walletName: 'เงินสด', catName: 'อาหาร',       note: 'สุกี้กับครอบครัว',   time: '18:30' },
+  { date: '2026-05-25', type: 'income',   amount: 3500,  walletName: 'K-push', catName: 'ฟรีแลนซ์',    note: 'งานเว็บ',             time: '17:00' },
+  { date: '2026-05-28', type: 'expense',  amount: 280,   walletName: 'SCB',    catName: 'บันเทิง',     note: 'คอนเสิร์ต',           time: '19:00' },
+  { date: '2026-06-01', type: 'income',   amount: 25000, walletName: 'SCB',    catName: 'เงินเดือน',   note: 'เงินเดือนมิถุนายน',   time: '09:00' },
+  { date: '2026-06-05', type: 'expense',  amount: 130,   walletName: 'เงินสด', catName: 'อาหาร',       note: 'ข้าวกลางวัน',         time: '12:15' },
+  { date: '2026-06-08', type: 'expense',  amount: 50,    walletName: 'K-push', catName: 'เดินทาง',      note: 'รถไฟฟ้า',             time: '07:45' },
+]
+
+async function resetDemoData(
+  supabase: ReturnType<typeof createClient>,
+  uid: string,
+) {
+  await supabase.from('transactions').delete().eq('user_id', uid)
+  await supabase.from('wallets').delete().eq('user_id', uid)
+  await supabase.from('categories').delete().eq('user_id', uid)
+  const [{ data: wallets }, { data: cats }] = await Promise.all([
+    supabase.from('wallets').insert(DEMO_WALLETS.map(w => ({ ...w, user_id: uid }))).select(),
+    supabase.from('categories').insert(SEED_CATEGORIES.map(c => ({ ...c, user_id: uid }))).select(),
+  ])
+  if (!wallets || !cats) return
+  const byWallet: Record<string, string> = {}
+  wallets.forEach((w: { name: string; id: string }) => { byWallet[w.name] = w.id })
+  const byCat: Record<string, string> = {}
+  cats.forEach((c: { name: string; id: string }) => { byCat[c.name] = c.id })
+  const rows = DEMO_TRANSACTIONS
+    .map(t => ({
+      user_id:      uid,
+      wallet_id:    byWallet[t.walletName],
+      to_wallet_id: t.toWalletName ? (byWallet[t.toWalletName] ?? null) : null,
+      type:         t.type,
+      amount:       t.amount,
+      category_id:  t.catName ? (byCat[t.catName] ?? null) : null,
+      note:         t.note ?? null,
+      date:         t.date,
+      time:         t.time ?? null,
+    }))
+    .filter(t => t.wallet_id)
+  await supabase.from('transactions').insert(rows)
+}
+
 // ── types ─────────────────────────────────────────────────────────────────────
 
 export type NewTransaction = {
@@ -49,6 +123,8 @@ interface FinanceContextType {
   categories:   Category[]
   displayName:  string
   userId:       string
+  userEmail:    string
+  isDemoUser:   boolean
   // wallet CRUD
   addWallet:    (data: NewWallet) => Promise<void>
   updateWallet: (id: string, updates: Partial<MockWallet>) => Promise<void>
@@ -130,12 +206,14 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
   const [loading,      setLoading]      = useState(true)
   const [displayName,  setDisplayName]  = useState('')
   const [userId,       setUserId]       = useState('')
+  const [userEmail,    setUserEmail]    = useState('')
+  const [isDemoUser,   setIsDemoUser]   = useState(false)
 
   useEffect(() => {
     // Track in-flight loads so a new auth event can cancel a stale one
     let currentLoad: { cancelled: boolean } | null = null
 
-    async function loadForSession(session: Session) {
+    async function loadForSession(session: Session, triggerEvent: string) {
       if (currentLoad) currentLoad.cancelled = true
       const thisLoad = { cancelled: false }
       currentLoad = thisLoad
@@ -147,9 +225,16 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
         ?? session.user.email?.split('@')[0]
         ?? 'ผู้ใช้'
 
+      const isDemo = session.user.email === DEMO_EMAIL
       if (!thisLoad.cancelled) {
         setUserId(uid)
         setDisplayName(name)
+        setUserEmail(session.user.email ?? '')
+        setIsDemoUser(isDemo)
+      }
+      if (isDemo && triggerEvent === 'SIGNED_IN') {
+        await resetDemoData(supabase, uid)
+        if (thisLoad.cancelled) return
       }
 
       // ── wallets ──────────────────────────────────────────────
@@ -206,6 +291,8 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
       setTransactions([])
       setDisplayName('')
       setUserId('')
+      setUserEmail('')
+      setIsDemoUser(false)
       setLoading(false)
     }
 
@@ -216,7 +303,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
           return
         }
         if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-          await loadForSession(session)
+          await loadForSession(session, event)
         }
         // TOKEN_REFRESHED: session is already valid, no reload needed
       }
@@ -375,7 +462,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <FinanceContext.Provider value={{
-      wallets, totalBalance, loading, categories, displayName, userId,
+      wallets, totalBalance, loading, categories, displayName, userId, userEmail, isDemoUser,
       addWallet, updateWallet, deleteWallet,
       transactions, addTransaction, deleteTransaction, updateTransaction,
       addCategory, deleteCategory,

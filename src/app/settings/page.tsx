@@ -1,9 +1,11 @@
 'use client'
 import { useState } from 'react'
 import { Pencil, Trash2, Plus, X } from 'lucide-react'
+import { toast } from 'sonner'
 import { useFinance } from '@/lib/FinanceContext'
 import { MockWallet, Category, NewWallet, NewCategory } from '@/lib/supabase/types'
 import { formatCurrency } from '@/lib/constants'
+import { createClient } from '@/lib/supabase/client'
 
 // ── constants ─────────────────────────────────────────────────────────────────
 
@@ -164,6 +166,7 @@ export default function SettingsPage() {
     wallets, categories,
     addWallet, updateWallet, deleteWallet,
     addCategory, deleteCategory,
+    isDemoUser, userEmail,
   } = useFinance()
 
   // ── wallet state ────────────────────────────────────────────────────────────
@@ -211,7 +214,34 @@ export default function SettingsPage() {
     setConfirmDelWallet(null)
   }
 
-  // ── category state ──────────────────────────────────────────────────────────
+  // ── account state ───────────────────────────────────────────────────────────
+  const [changePwOpen, setChangePwOpen] = useState(false)
+  const [newPw,        setNewPw]        = useState('')
+  const [confirmPw,    setConfirmPw]    = useState('')
+  const [pwError,      setPwError]      = useState('')
+  const [pwSuccess,    setPwSuccess]    = useState('')
+
+  const handleChangePassword = () => {
+    if (isDemoUser) {
+      toast.error('ไม่สามารถแก้ไขบัญชี Demo ได้')
+      return
+    }
+    setNewPw(''); setConfirmPw(''); setPwError(''); setPwSuccess('')
+    setChangePwOpen(true)
+  }
+
+  const handleSavePw = async () => {
+    setPwError(''); setPwSuccess('')
+    if (newPw.length < 6) { setPwError('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'); return }
+    if (newPw !== confirmPw) { setPwError('รหัสผ่านไม่ตรงกัน'); return }
+    const supabase = createClient()
+    const { error } = await supabase.auth.updateUser({ password: newPw })
+    if (error) { setPwError('เกิดข้อผิดพลาด กรุณาลองใหม่'); return }
+    setPwSuccess('เปลี่ยนรหัสผ่านสำเร็จ')
+    setTimeout(() => { setChangePwOpen(false) }, 1500)
+  }
+
+  // ── category state ───────────────────────────────────────────────────────────
   const [addCatType,    setAddCatType]    = useState<'expense' | 'income' | null>(null)
   const [confirmDelCat, setConfirmDelCat] = useState<Category | null>(null)
   const [delCatError,   setDelCatError]   = useState('')
@@ -468,6 +498,33 @@ export default function SettingsPage() {
         )}
       </SectionCard>
 
+      {/* ── Section 4: Account ── */}
+      <SectionCard title="บัญชีของฉัน">
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #F3F4F6' }}>
+          <div>
+            <p className="text-[12px] text-[#9CA3AF] mb-0.5">อีเมล</p>
+            <p className="text-[14px] font-[500] text-[#111827]">{userEmail}</p>
+          </div>
+          {isDemoUser && (
+            <span
+              className="text-[11px] font-[500] px-2 py-1 rounded-full"
+              style={{ background: '#E0F2FE', color: '#1D6FA4' }}
+            >
+              Demo
+            </span>
+          )}
+        </div>
+        <div className="px-5 py-4">
+          <button
+            onClick={handleChangePassword}
+            className="h-9 px-4 rounded-lg text-[13px] font-[500] border transition-colors hover:bg-[#F9FAFB]"
+            style={{ color: '#374151', borderColor: '#E5E7EB', background: '#FFFFFF' }}
+          >
+            เปลี่ยนรหัสผ่าน
+          </button>
+        </div>
+      </SectionCard>
+
       {/* ═══ Modals ═══ */}
 
       <Modal open={addWalletOpen} onClose={() => setAddWalletOpen(false)} title="เพิ่มกระเป๋า">
@@ -534,6 +591,45 @@ export default function SettingsPage() {
           onCancel={() => setConfirmDelCat(null)}
           onConfirm={handleDeleteCat}
           confirmLabel="ลบ"
+        />
+      </Modal>
+
+      <Modal open={changePwOpen} onClose={() => setChangePwOpen(false)} title="เปลี่ยนรหัสผ่าน">
+        <div>
+          <FieldLabel>รหัสผ่านใหม่</FieldLabel>
+          <FieldInput
+            type="password"
+            placeholder="อย่างน้อย 6 ตัวอักษร"
+            value={newPw}
+            onChange={e => setNewPw(e.target.value)}
+          />
+        </div>
+        <div>
+          <FieldLabel>ยืนยันรหัสผ่าน</FieldLabel>
+          <FieldInput
+            type="password"
+            placeholder="••••••••"
+            value={confirmPw}
+            onChange={e => setConfirmPw(e.target.value)}
+          />
+        </div>
+        {pwError && (
+          <p className="text-[13px] rounded-lg px-3 py-2"
+            style={{ color: '#EF4444', background: '#FEF2F2', border: '1px solid #FECACA' }}>
+            {pwError}
+          </p>
+        )}
+        {pwSuccess && (
+          <p className="text-[13px] rounded-lg px-3 py-2"
+            style={{ color: '#059669', background: '#E8FBF4', border: '1px solid #6EE7B7' }}>
+            {pwSuccess}
+          </p>
+        )}
+        <ModalFooter
+          onCancel={() => setChangePwOpen(false)}
+          onConfirm={handleSavePw}
+          confirmLabel="บันทึก"
+          disabled={!newPw || newPw.length < 6 || newPw !== confirmPw || !!pwSuccess}
         />
       </Modal>
     </div>

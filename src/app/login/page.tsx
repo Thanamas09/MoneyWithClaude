@@ -3,13 +3,29 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { DEMO_EMAIL } from '@/lib/FinanceContext'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email,    setEmail]    = useState('')
-  const [password, setPassword] = useState('')
-  const [error,    setError]    = useState('')
-  const [loading,  setLoading]  = useState(false)
+  const [email,       setEmail]       = useState('')
+  const [password,    setPassword]    = useState('')
+  const [error,       setError]       = useState('')
+  const [loading,     setLoading]     = useState(false)
+  const [demoLoading, setDemoLoading] = useState(false)
+
+  const handleDemoLogin = async () => {
+    setDemoLoading(true)
+    setError('')
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithPassword({ email: DEMO_EMAIL, password: 'demo1234' })
+    if (error) {
+      setError('บัญชี Demo ไม่พร้อมใช้งาน กรุณาลองใหม่')
+      setDemoLoading(false)
+      return
+    }
+    router.push('/dashboard')
+    router.refresh()
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -109,6 +125,22 @@ export default function LoginPage() {
             </button>
 
           </form>
+
+          {/* Demo */}
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              disabled={loading || demoLoading}
+              className="w-full h-11 rounded-lg text-[14px] font-[500] border transition-all disabled:opacity-50"
+              style={{ color: '#059669', borderColor: '#059669', background: '#FFFFFF' }}
+            >
+              {demoLoading ? 'กำลังโหลดข้อมูล...' : '🎮 ลองใช้งาน (Demo)'}
+            </button>
+            <p className="text-center text-[12px]" style={{ color: '#9CA3AF' }}>
+              ไม่ต้องสมัคร · ข้อมูลตัวอย่างพร้อมใช้
+            </p>
+          </div>
 
           {/* Divider */}
           <div className="flex items-center gap-3">

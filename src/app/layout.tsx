@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import AppShell from '@/components/AppShell'
 import { FinanceProvider } from '@/lib/FinanceContext'
+import { Toaster } from 'sonner'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <FinanceProvider>
           <AppShell>{children}</AppShell>
         </FinanceProvider>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   )
