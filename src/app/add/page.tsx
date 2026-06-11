@@ -44,6 +44,8 @@ export default function AddPage() {
   const [date,       setDate]       = useState(new Date().toISOString().slice(0, 10))
   const [time,       setTime]       = useState(now)
   const [note,       setNote]       = useState('')
+  const [submitError, setSubmitError] = useState('')
+  const [submitting,  setSubmitting]  = useState(false)
 
   useEffect(() => {
     if (wallets.length > 0) {
@@ -67,8 +69,10 @@ export default function AddPage() {
   }
 
   const handleSubmit = async () => {
-    if (!canSubmit) return
-    await addTransaction({
+    if (!canSubmit || submitting) return
+    setSubmitError('')
+    setSubmitting(true)
+    const ok = await addTransaction({
       wallet_id:    walletId,
       to_wallet_id: txType === 'transfer' ? (toWalletId || null) : null,
       type:         txType,
@@ -78,6 +82,8 @@ export default function AddPage() {
       date,
       time:         time || undefined,
     })
+    setSubmitting(false)
+    if (!ok) { setSubmitError('บันทึกไม่สำเร็จ กรุณาลองใหม่'); return }
     router.push('/history')
   }
 
@@ -228,14 +234,24 @@ export default function AddPage() {
           />
         </div>
 
+        {/* Error */}
+        {submitError && (
+          <p
+            className="text-[13px] rounded-lg px-3 py-2"
+            style={{ color: '#EF4444', background: '#FEF2F2', border: '1px solid #FECACA' }}
+          >
+            {submitError}
+          </p>
+        )}
+
         {/* Submit */}
         <button
           onClick={handleSubmit}
-          disabled={!canSubmit}
+          disabled={!canSubmit || submitting}
           className="w-full h-11 rounded-lg text-[14px] font-[500] text-white transition-opacity duration-150 disabled:opacity-40"
           style={{ background: '#059669' }}
         >
-          บันทึก
+          {submitting ? 'กำลังบันทึก...' : 'บันทึก'}
         </button>
       </div>
     </div>

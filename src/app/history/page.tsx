@@ -95,7 +95,7 @@ export default function HistoryPage() {
 
   const handleTypeChange = (t: TxType) => setForm(f => ({ ...f, type: t, categoryId: '' }))
 
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (!editTx || !canSaveEdit) return
     const amt = parseFloat(form.amount)
     if (!amt || amt <= 0) return
@@ -109,7 +109,7 @@ export default function HistoryPage() {
       date:         form.date,
       time:         form.time || undefined,
     }
-    updateTransaction(editTx.id, update)
+    await updateTransaction(editTx.id, update)
     setEditOpen(false)
     setEditTx(null)
   }

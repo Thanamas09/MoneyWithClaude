@@ -55,7 +55,7 @@ interface FinanceContextType {
   deleteWallet: (id: string) => Promise<void>
   // transaction CRUD
   transactions:      Transaction[]
-  addTransaction:    (tx: NewTransaction) => Promise<void>
+  addTransaction:    (tx: NewTransaction) => Promise<boolean>
   deleteTransaction: (id: string) => Promise<void>
   updateTransaction: (id: string, updates: NewTransaction) => Promise<void>
   // category CRUD
@@ -269,9 +269,9 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
 
   // ── transaction mutations ─────────────────────────────────────────────────
 
-  const addTransaction = async (newTx: NewTransaction) => {
+  const addTransaction = async (newTx: NewTransaction): Promise<boolean> => {
     const { data: { session } } = await supabase.auth.getSession()
-    if (!session) return
+    if (!session) return false
 
     const deltas = getDeltas(newTx)
     const next   = applyDeltas(wallets, deltas)
@@ -292,11 +292,12 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
       .select()
       .single()
 
-    if (error || !inserted) return
+    if (error || !inserted) return false
 
     await pushBalances(supabase, next, deltas.map(d => d.id))
     setWallets(next)
     setTransactions(prev => [enrichTx(inserted, next, categories), ...prev])
+    return true
   }
 
   const deleteTransaction = async (id: string) => {

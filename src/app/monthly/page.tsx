@@ -38,7 +38,7 @@ export default function MonthlyPage() {
   const [year,  setYear]  = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth() + 1)
 
-  const { transactions } = useFinance()
+  const { transactions, loading } = useFinance()
 
   const prefix   = `${year}-${String(month).padStart(2, '0')}`
   const monthTxs = transactions.filter(t => t.date.startsWith(prefix))
@@ -57,6 +57,25 @@ export default function MonthlyPage() {
 
   const prevMonth = () => { if (month === 1) { setMonth(12); setYear(y => y - 1) } else setMonth(m => m - 1) }
   const nextMonth = () => { if (month === 12) { setMonth(1); setYear(y => y + 1) } else setMonth(m => m + 1) }
+
+  if (loading) {
+    return (
+      <div className="p-8 space-y-6">
+        <div className="h-6 w-28 bg-[#F3F4F6] rounded animate-pulse" />
+        <div className="flex items-center justify-center gap-4">
+          <div className="w-9 h-9 bg-[#F3F4F6] rounded-lg animate-pulse" />
+          <div className="h-5 w-44 bg-[#F3F4F6] rounded animate-pulse" />
+          <div className="w-9 h-9 bg-[#F3F4F6] rounded-lg animate-pulse" />
+        </div>
+        <div className="flex gap-4">
+          {[0, 1, 2, 3].map(i => (
+            <div key={i} className="flex-1 h-20 bg-[#F3F4F6] rounded-[10px] animate-pulse" />
+          ))}
+        </div>
+        <div className="h-64 bg-[#F3F4F6] rounded-[10px] animate-pulse" />
+      </div>
+    )
+  }
 
   return (
     <div className="p-8 space-y-6">

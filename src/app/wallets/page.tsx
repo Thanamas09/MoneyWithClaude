@@ -6,14 +6,14 @@ import { MockWallet } from '@/lib/supabase/types'
 import { formatCurrency } from '@/lib/constants'
 
 const EMOJI_OPTIONS = ['💵','📱','🏦','🏛','💳','💰','🪙','🏧','💎','🎯','💸','🌟']
-const COLOR_OPTIONS = ['#16A34A','#D97706','#2563EB','#7C3AED','#DC2626','#E8593C','#0891B2','#059669','#EC4899','#1D6FA4','#D97706','#374151']
+const COLOR_OPTIONS = ['#16A34A','#D97706','#2563EB','#7C3AED','#DC2626','#E8593C','#0891B2','#059669','#EC4899','#1D6FA4','#374151']
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return <p className="text-[12px] font-[400] text-[#6B7280] mb-[6px]">{children}</p>
 }
 
 export default function WalletsPage() {
-  const { wallets, totalBalance, updateWallet } = useFinance()
+  const { wallets, totalBalance, updateWallet, loading } = useFinance()
 
   const [editing,     setEditing]     = useState<MockWallet | null>(null)
   const [editName,    setEditName]    = useState('')
@@ -39,6 +39,20 @@ export default function WalletsPage() {
       bg:      editColor + '15',
     })
     setEditing(null)
+  }
+
+  if (loading) {
+    return (
+      <div className="p-8 space-y-6">
+        <div className="h-6 w-36 bg-[#F3F4F6] rounded animate-pulse" />
+        <div className="h-20 rounded-[10px] bg-[#F3F4F6] animate-pulse" />
+        <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
+          {[0, 1, 2, 3, 4, 5].map(i => (
+            <div key={i} className="h-24 rounded-[10px] bg-[#F3F4F6] animate-pulse" />
+          ))}
+        </div>
+      </div>
+    )
   }
 
   return (
