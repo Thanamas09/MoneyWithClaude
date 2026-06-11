@@ -8,13 +8,13 @@ interface WalletCardProps {
 export default function WalletCard({ wallet }: WalletCardProps) {
   return (
     <div
-      className="bg-white rounded-xl p-5 flex flex-col gap-3"
+      className="bg-white p-5 flex flex-col gap-3"
       style={{
         borderTop: `4px solid ${wallet.color}`,
-        borderLeft: '1px solid #E5E7EB',
-        borderRight: '1px solid #E5E7EB',
-        borderBottom: '1px solid #E5E7EB',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+        borderLeft: '2px solid #1A1A1A',
+        borderRight: '2px solid #1A1A1A',
+        borderBottom: '2px solid #1A1A1A',
+        borderRadius: '10px',
       }}
     >
       <div className="flex items-center gap-2">
@@ -23,7 +23,7 @@ export default function WalletCard({ wallet }: WalletCardProps) {
       </div>
       <div className="flex justify-end">
         <span
-          className="text-[20px] font-[700]"
+          className="text-[20px] font-[500]"
           style={{ color: wallet.color }}
         >
           {formatCurrency(wallet.balance)}

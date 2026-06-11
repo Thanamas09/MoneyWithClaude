@@ -12,9 +12,9 @@ type TxType = 'income' | 'expense' | 'transfer'
 type FilterType = 'all' | TxType
 
 const TYPE_CONFIG: Record<TxType, { label: string; activeBg: string; activeColor: string; activeBorder: string }> = {
-  expense:  { label: 'รายจ่าย', activeBg: '#FEE2E2', activeColor: '#DC2626', activeBorder: '#FCA5A5' },
-  income:   { label: 'รายรับ',  activeBg: '#DCFCE7', activeColor: '#16A34A', activeBorder: '#86EFAC' },
-  transfer: { label: 'โอน',     activeBg: '#EEF2FF', activeColor: '#4F46E5', activeBorder: '#A5B4FC' },
+  expense:  { label: 'รายจ่าย', activeBg: '#FEE2E2', activeColor: '#EF4444', activeBorder: '#FCA5A5' },
+  income:   { label: 'รายรับ',  activeBg: '#E8FBF4', activeColor: '#059669', activeBorder: '#6EE7B7' },
+  transfer: { label: 'โอน',     activeBg: '#E0F2FE', activeColor: '#1D6FA4', activeBorder: '#38BDF8' },
 }
 
 interface EditForm {
@@ -32,14 +32,14 @@ function FieldInput({ ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none transition-colors focus:border-[#6366F1]"
+      className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none transition-colors focus:border-[#059669]"
       style={{ borderColor: '#E5E7EB', ...props.style }}
     />
   )
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <p className="text-[12px] font-[500] text-[#6B7280] mb-[6px]">{children}</p>
+  return <p className="text-[12px] font-[400] text-[#6B7280] mb-[6px]">{children}</p>
 }
 
 export default function HistoryPage() {
@@ -124,7 +124,7 @@ export default function HistoryPage() {
 
   return (
     <div className="p-8 space-y-6">
-      <h1 className="text-[20px] font-[600] text-[#111827]">ประวัติรายการ</h1>
+      <h1 className="text-[20px] font-[500] text-[#111827]">ประวัติรายการ</h1>
 
       {/* Search + filters */}
       <div className="flex flex-wrap items-center gap-3">
@@ -132,7 +132,7 @@ export default function HistoryPage() {
           placeholder="ค้นหา..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="h-9 w-56 border rounded-lg px-3 text-[14px] outline-none transition-colors focus:border-[#6366F1] bg-white"
+          className="h-9 w-56 border rounded-lg px-3 text-[14px] outline-none transition-colors focus:border-[#059669] bg-white"
           style={{ borderColor: '#E5E7EB' }}
         />
         <select
@@ -152,7 +152,7 @@ export default function HistoryPage() {
               className="h-9 px-3 rounded-lg text-[13px] font-[500] border transition-all duration-150"
               style={
                 typeFilter === t
-                  ? { background: '#6366F1', color: '#fff', borderColor: '#6366F1' }
+                  ? { background: '#059669', color: '#fff', borderColor: '#059669' }
                   : { background: '#fff', color: '#6B7280', borderColor: '#E5E7EB' }
               }
             >
@@ -168,8 +168,8 @@ export default function HistoryPage() {
       {/* Transaction list */}
       {sortedDates.length === 0 ? (
         <div
-          className="rounded-xl py-20 flex flex-col items-center justify-center gap-3"
-          style={{ border: '1px solid #E5E7EB', background: '#FFFFFF' }}
+          className="py-20 flex flex-col items-center justify-center gap-3"
+          style={{ border: '2px solid #1A1A1A', borderRadius: '10px', background: '#FFFFFF' }}
         >
           <span className="text-[48px]">💸</span>
           <p className="text-[16px] font-[500] text-[#6B7280]">ยังไม่มีรายการ</p>
@@ -188,27 +188,27 @@ export default function HistoryPage() {
                   className="flex items-center justify-between px-5 py-2"
                   style={{
                     background: '#F9FAFB',
-                    borderRadius: '8px 8px 0 0',
-                    borderTop: '1px solid #E5E7EB',
-                    borderLeft: '1px solid #E5E7EB',
-                    borderRight: '1px solid #E5E7EB',
+                    borderRadius: '10px 10px 0 0',
+                    borderTop: '2px solid #1A1A1A',
+                    borderLeft: '2px solid #1A1A1A',
+                    borderRight: '2px solid #1A1A1A',
                   }}
                 >
-                  <span className="text-[13px] font-[600] text-[#6B7280]">
+                  <span className="text-[13px] font-[500] text-[#6B7280]">
                     {formatDateHeader(date)}
                   </span>
                   <div className="flex gap-3 text-[12px]">
-                    {dayIn  > 0 && <span style={{ color: '#16A34A' }} className="font-[500]">+{formatCurrency(dayIn)}</span>}
-                    {dayOut > 0 && <span style={{ color: '#DC2626' }} className="font-[500]">−{formatCurrency(dayOut)}</span>}
+                    {dayIn  > 0 && <span style={{ color: '#059669' }} className="font-[500]">+{formatCurrency(dayIn)}</span>}
+                    {dayOut > 0 && <span style={{ color: '#EF4444' }} className="font-[500]">−{formatCurrency(dayOut)}</span>}
                   </div>
                 </div>
                 {/* Rows */}
                 <div
                   style={{
-                    borderLeft: '1px solid #E5E7EB',
-                    borderRight: '1px solid #E5E7EB',
-                    borderBottom: '1px solid #E5E7EB',
-                    borderRadius: '0 0 8px 8px',
+                    borderLeft: '2px solid #1A1A1A',
+                    borderRight: '2px solid #1A1A1A',
+                    borderBottom: '2px solid #1A1A1A',
+                    borderRadius: '0 0 10px 10px',
                     background: '#FFFFFF',
                   }}
                 >
@@ -241,7 +241,7 @@ export default function HistoryPage() {
           >
             {/* Modal header */}
             <div className="flex items-center justify-between">
-              <h2 className="text-[18px] font-[600] text-[#111827]">แก้ไขรายการ</h2>
+              <h2 className="text-[18px] font-[500] text-[#111827]">แก้ไขรายการ</h2>
               <button
                 onClick={() => { setEditOpen(false); setEditTx(null) }}
                 className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#111827] hover:bg-[#F3F4F6] transition-colors"
@@ -256,7 +256,7 @@ export default function HistoryPage() {
                 <button
                   key={t}
                   onClick={() => handleTypeChange(t)}
-                  className="flex-1 h-9 rounded-lg text-[13px] font-[600] border transition-all duration-150"
+                  className="flex-1 h-9 rounded-lg text-[13px] font-[500] border transition-all duration-150"
                   style={
                     form.type === t
                       ? { background: cfg.activeBg, color: cfg.activeColor, borderColor: cfg.activeBorder }
@@ -278,7 +278,7 @@ export default function HistoryPage() {
                 className="w-full bg-transparent outline-none text-center text-[#111827] transition-colors"
                 style={{
                   fontSize: '28px',
-                  fontWeight: 700,
+                  fontWeight: 500,
                   border: 'none',
                   borderBottom: `2px solid ${form.amount ? TYPE_CONFIG[form.type].activeBorder : '#E5E7EB'}`,
                   paddingBottom: '8px',
@@ -339,11 +339,12 @@ export default function HistoryPage() {
                     <button
                       key={cat.id}
                       onClick={() => setF('categoryId', cat.id)}
-                      className="flex flex-col items-center justify-center gap-1 rounded-[8px] border transition-all"
+                      className="flex flex-col items-center justify-center gap-1 border transition-all"
                       style={{
                         height: 52,
-                        background: form.categoryId === cat.id ? '#EEF2FF' : '#F9FAFB',
-                        border: form.categoryId === cat.id ? '2px solid #6366F1' : '1px solid #E5E7EB',
+                        borderRadius: '8px',
+                        background: form.categoryId === cat.id ? '#E8FBF4' : '#F9FAFB',
+                        border: form.categoryId === cat.id ? '2px solid #059669' : '1px solid #E5E7EB',
                       }}
                     >
                       <span className="text-[17px] leading-none">{cat.icon}</span>
@@ -381,7 +382,7 @@ export default function HistoryPage() {
             <div className="flex gap-3 pt-2">
               <button
                 onClick={() => { setEditOpen(false); setEditTx(null) }}
-                className="flex-1 h-11 rounded-lg text-[14px] font-[600] border transition-colors"
+                className="flex-1 h-11 rounded-lg text-[14px] font-[500] border transition-colors"
                 style={{ color: '#6B7280', borderColor: '#E5E7EB', background: '#FFFFFF' }}
               >
                 ยกเลิก
@@ -389,8 +390,8 @@ export default function HistoryPage() {
               <button
                 onClick={saveEdit}
                 disabled={!canSaveEdit}
-                className="flex-1 h-11 rounded-lg text-[14px] font-[600] text-white transition-opacity disabled:opacity-40"
-                style={{ background: '#6366F1' }}
+                className="flex-1 h-11 rounded-lg text-[14px] font-[500] text-white transition-opacity disabled:opacity-40"
+                style={{ background: '#059669' }}
               >
                 บันทึก
               </button>

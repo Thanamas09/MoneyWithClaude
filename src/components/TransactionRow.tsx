@@ -19,17 +19,17 @@ export default function TransactionRow({
   const isTransfer = tx.type === 'transfer'
   const isIncome   = tx.type === 'income'
 
-  const amountColor  = isExpense ? '#DC2626' : isIncome ? '#16A34A' : '#6366F1'
+  const amountColor  = isExpense ? '#EF4444' : isIncome ? '#059669' : '#1D6FA4'
   const amountPrefix = isExpense ? '−' : isIncome ? '+' : '↔'
 
   const categoryBg = tx.category?.color
     ? `${tx.category.color}18`
-    : isTransfer ? '#EEF2FF' : '#F3F4F6'
+    : isTransfer ? '#E0F2FE' : '#F3F4F6'
   const categoryIcon = isTransfer ? '🔄' : (tx.category?.icon ?? '💸')
 
   return (
     <div
-      className="group flex items-center gap-4 px-5 py-[14px] hover:bg-[#FAFAFA] transition-colors duration-100"
+      className="group flex items-center gap-4 px-5 py-[14px] hover:bg-[#F8FAFB] transition-colors duration-100"
       style={!isLast ? { borderBottom: '1px solid #F3F4F6' } : undefined}
     >
       {/* Category circle */}
@@ -50,8 +50,8 @@ export default function TransactionRow({
             <span
               className="text-[11px] font-[500] px-2 py-[2px] rounded-full"
               style={{
-                backgroundColor: `${tx.wallet.color ?? '#6366F1'}18`,
-                color: tx.wallet.color ?? '#6366F1',
+                backgroundColor: `${tx.wallet.color ?? '#059669'}18`,
+                color: tx.wallet.color ?? '#059669',
               }}
             >
               {tx.wallet.icon} {tx.wallet.name}
@@ -61,8 +61,8 @@ export default function TransactionRow({
             <span
               className="text-[11px] font-[500] px-2 py-[2px] rounded-full"
               style={{
-                backgroundColor: `${tx.to_wallet.color ?? '#6366F1'}18`,
-                color: tx.to_wallet.color ?? '#6366F1',
+                backgroundColor: `${tx.to_wallet.color ?? '#1D6FA4'}18`,
+                color: tx.to_wallet.color ?? '#1D6FA4',
               }}
             >
               → {tx.to_wallet.icon} {tx.to_wallet.name}
@@ -78,7 +78,7 @@ export default function TransactionRow({
 
       {/* Amount */}
       <span
-        className="text-[14px] font-[600] shrink-0 min-w-[90px] text-right"
+        className="text-[14px] font-[500] shrink-0 min-w-[90px] text-right"
         style={{ color: amountColor }}
       >
         {amountPrefix}{formatCurrency(tx.amount)}
@@ -89,7 +89,7 @@ export default function TransactionRow({
         {onEdit && (
           <button
             onClick={e => { e.stopPropagation(); onEdit(tx) }}
-            className="w-7 h-7 flex items-center justify-center rounded-md text-[#9CA3AF] hover:text-[#6366F1] hover:bg-[#EEF2FF] transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-md text-[#9CA3AF] hover:text-[#059669] hover:bg-[#E8FBF4] transition-colors"
             title="แก้ไข"
           >
             <Pencil size={14} strokeWidth={1.8} />
@@ -98,7 +98,7 @@ export default function TransactionRow({
         {onDelete && (
           <button
             onClick={e => { e.stopPropagation(); onDelete(tx.id) }}
-            className="w-7 h-7 flex items-center justify-center rounded-md text-[#9CA3AF] hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-md text-[#9CA3AF] hover:text-[#EF4444] hover:bg-[#FEF2F2] transition-colors"
             title="ลบ"
           >
             <Trash2 size={14} strokeWidth={1.8} />

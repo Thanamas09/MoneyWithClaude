@@ -6,10 +6,10 @@ import { MockWallet } from '@/lib/supabase/types'
 import { formatCurrency } from '@/lib/constants'
 
 const EMOJI_OPTIONS = ['💵','📱','🏦','🏛','💳','💰','🪙','🏧','💎','🎯','💸','🌟']
-const COLOR_OPTIONS = ['#16A34A','#D97706','#2563EB','#7C3AED','#DC2626','#E8593C','#0891B2','#6366F1','#EC4899','#059669','#D97706','#374151']
+const COLOR_OPTIONS = ['#16A34A','#D97706','#2563EB','#7C3AED','#DC2626','#E8593C','#0891B2','#059669','#EC4899','#1D6FA4','#D97706','#374151']
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <p className="text-[12px] font-[500] text-[#6B7280] mb-[6px]">{children}</p>
+  return <p className="text-[12px] font-[400] text-[#6B7280] mb-[6px]">{children}</p>
 }
 
 export default function WalletsPage() {
@@ -43,15 +43,19 @@ export default function WalletsPage() {
 
   return (
     <div className="p-8 space-y-6">
-      <h1 className="text-[20px] font-[600] text-[#111827]">กระเป๋าเงิน</h1>
+      <h1 className="text-[20px] font-[500] text-[#111827]">กระเป๋าเงิน</h1>
 
       {/* Total */}
       <div
-        className="rounded-xl px-6 py-5"
-        style={{ background: '#6366F1', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' }}
+        className="px-6 py-5"
+        style={{
+          background: '#059669',
+          border: '2px solid #1A1A1A',
+          borderRadius: '10px',
+        }}
       >
-        <p className="text-[13px] font-[500] uppercase tracking-[0.05em] text-indigo-200">ยอดรวมทุกกระเป๋า</p>
-        <p className="text-[28px] font-[700] text-white mt-1">{formatCurrency(totalBalance)}</p>
+        <p className="text-[13px] font-[400] uppercase tracking-[0.05em]" style={{ color: '#A7F3D0' }}>ยอดรวมทุกกระเป๋า</p>
+        <p className="text-[28px] font-[500] text-white mt-1">{formatCurrency(totalBalance)}</p>
       </div>
 
       {/* Wallet grid */}
@@ -59,13 +63,13 @@ export default function WalletsPage() {
         {wallets.map(w => (
           <div
             key={w.id}
-            className="bg-white rounded-xl p-5 flex items-start justify-between"
+            className="bg-white p-5 flex items-start justify-between"
             style={{
               borderTop: `4px solid ${w.color}`,
-              borderLeft: '1px solid #E5E7EB',
-              borderRight: '1px solid #E5E7EB',
-              borderBottom: '1px solid #E5E7EB',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+              borderLeft: '2px solid #1A1A1A',
+              borderRight: '2px solid #1A1A1A',
+              borderBottom: '2px solid #1A1A1A',
+              borderRadius: '10px',
             }}
           >
             <div className="flex items-start gap-3">
@@ -77,14 +81,14 @@ export default function WalletsPage() {
               </div>
               <div>
                 <p className="text-[14px] font-[500] text-[#111827]">{w.name}</p>
-                <p className="text-[18px] font-[700] mt-0.5" style={{ color: w.color }}>
+                <p className="text-[18px] font-[500] mt-0.5" style={{ color: w.color }}>
                   {formatCurrency(w.balance)}
                 </p>
               </div>
             </div>
             <button
               onClick={() => openEdit(w)}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#6366F1] hover:bg-[#EEF2FF] transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#059669] hover:bg-[#E8FBF4] transition-colors"
             >
               <Pencil size={15} strokeWidth={1.8} />
             </button>
@@ -105,7 +109,7 @@ export default function WalletsPage() {
           >
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h2 className="text-[18px] font-[600] text-[#111827]">แก้ไขกระเป๋า</h2>
+              <h2 className="text-[18px] font-[500] text-[#111827]">แก้ไขกระเป๋า</h2>
               <button
                 onClick={() => setEditing(null)}
                 className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#111827] hover:bg-[#F3F4F6] transition-colors"
@@ -121,7 +125,7 @@ export default function WalletsPage() {
             >
               <span className="text-[28px]">{editIcon}</span>
               <div>
-                <p className="text-[15px] font-[600]" style={{ color: editColor }}>
+                <p className="text-[15px] font-[500]" style={{ color: editColor }}>
                   {editName || editing.name}
                 </p>
                 <p className="text-[13px] text-[#6B7280]">
@@ -136,7 +140,7 @@ export default function WalletsPage() {
               <input
                 value={editName}
                 onChange={e => setEditName(e.target.value)}
-                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#6366F1] transition-colors"
+                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#059669] transition-colors"
                 style={{ borderColor: '#E5E7EB' }}
               />
             </div>
@@ -148,7 +152,7 @@ export default function WalletsPage() {
                 type="number"
                 value={editBalance}
                 onChange={e => setEditBalance(e.target.value)}
-                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#6366F1] transition-colors"
+                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#059669] transition-colors"
                 style={{ borderColor: '#E5E7EB' }}
               />
             </div>
@@ -164,7 +168,7 @@ export default function WalletsPage() {
                     className="w-10 h-10 rounded-lg text-[20px] flex items-center justify-center border transition-all"
                     style={
                       editIcon === e
-                        ? { borderColor: '#6366F1', background: '#EEF2FF', borderWidth: 2 }
+                        ? { borderColor: '#059669', background: '#E8FBF4', borderWidth: 2 }
                         : { borderColor: '#E5E7EB', background: '#F9FAFB' }
                     }
                   >
@@ -197,15 +201,15 @@ export default function WalletsPage() {
             <div className="flex gap-3 pt-1">
               <button
                 onClick={() => setEditing(null)}
-                className="flex-1 h-11 rounded-lg text-[14px] font-[600] border transition-colors"
+                className="flex-1 h-11 rounded-lg text-[14px] font-[500] border transition-colors"
                 style={{ color: '#6B7280', borderColor: '#E5E7EB', background: '#FFFFFF' }}
               >
                 ยกเลิก
               </button>
               <button
                 onClick={saveEdit}
-                className="flex-1 h-11 rounded-lg text-[14px] font-[600] text-white"
-                style={{ background: '#6366F1' }}
+                className="flex-1 h-11 rounded-lg text-[14px] font-[500] text-white"
+                style={{ background: '#059669' }}
               >
                 บันทึก
               </button>

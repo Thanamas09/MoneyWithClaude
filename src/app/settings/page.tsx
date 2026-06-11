@@ -10,8 +10,8 @@ import { formatCurrency } from '@/lib/constants'
 const WALLET_EMOJIS = ['💵', '💳', '🏦', '🏛', '📱', '💰', '🎒', '👛', '🏧', '💎']
 const CAT_EMOJIS    = ['🍔', '🚌', '🛍', '💡', '🏥', '🎬', '📦', '☕', '🎮', '🐾', '✈️', '🏠',
                        '💼', '💻', '🏦', '➕', '💰', '🎁', '📈', '💹', '🎓', '🍕', '🛺', '⚽']
-const COLORS        = ['#16A34A', '#D97706', '#2563EB', '#7C3AED', '#DC2626', '#E8593C', '#0891B2', '#6366F1']
-const CAT_COLORS    = ['#EF9F27', '#378ADD', '#D4537E', '#639922', '#7F77DD', '#E8593C', '#1D9E75', '#6366F1']
+const COLORS        = ['#16A34A', '#D97706', '#2563EB', '#7C3AED', '#DC2626', '#E8593C', '#0891B2', '#059669']
+const CAT_COLORS    = ['#EF9F27', '#378ADD', '#D4537E', '#639922', '#7F77DD', '#E8593C', '#1D9E75', '#059669']
 
 // ── tiny UI helpers ───────────────────────────────────────────────────────────
 
@@ -21,12 +21,12 @@ function SectionCard({ title, action, children }: {
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E7EB', background: '#FFFFFF' }}>
+    <div className="overflow-hidden" style={{ border: '2px solid #1A1A1A', borderRadius: '10px', background: '#FFFFFF' }}>
       <div
         className="flex items-center justify-between px-5 py-4"
         style={{ borderBottom: '1px solid #E5E7EB', background: '#F9FAFB' }}
       >
-        <h2 className="text-[14px] font-[600] text-[#111827]">{title}</h2>
+        <h2 className="text-[14px] font-[500] text-[#111827]">{title}</h2>
         {action}
       </div>
       {children}
@@ -35,14 +35,14 @@ function SectionCard({ title, action, children }: {
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <p className="text-[12px] font-[500] text-[#6B7280] mb-[6px]">{children}</p>
+  return <p className="text-[12px] font-[400] text-[#6B7280] mb-[6px]">{children}</p>
 }
 
 function FieldInput({ ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#6366F1] transition-colors"
+      className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#059669] transition-colors"
       style={{ borderColor: '#E5E7EB', ...props.style }}
     />
   )
@@ -63,7 +63,7 @@ function EmojiGrid({ options, value, onChange }: {
           className="w-10 h-10 rounded-lg text-[20px] flex items-center justify-center border transition-all"
           style={
             value === e
-              ? { borderColor: '#6366F1', background: '#EEF2FF', borderWidth: 2 }
+              ? { borderColor: '#059669', background: '#E8FBF4', borderWidth: 2 }
               : { borderColor: '#E5E7EB', background: '#F9FAFB' }
           }
         >
@@ -116,7 +116,7 @@ function Modal({ open, onClose, title, children }: {
         style={{ background: '#FFFFFF' }}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-[18px] font-[600] text-[#111827]">{title}</h3>
+          <h3 className="text-[18px] font-[500] text-[#111827]">{title}</h3>
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#111827] hover:bg-[#F3F4F6] transition-colors"
@@ -140,7 +140,7 @@ function ModalFooter({ onCancel, onConfirm, confirmLabel = 'บันทึก',
     <div className="flex gap-3 pt-1">
       <button
         onClick={onCancel}
-        className="flex-1 h-11 rounded-lg text-[14px] font-[600] border transition-colors"
+        className="flex-1 h-11 rounded-lg text-[14px] font-[500] border transition-colors"
         style={{ color: '#6B7280', borderColor: '#E5E7EB', background: '#FFFFFF' }}
       >
         ยกเลิก
@@ -148,8 +148,8 @@ function ModalFooter({ onCancel, onConfirm, confirmLabel = 'บันทึก',
       <button
         onClick={onConfirm}
         disabled={disabled}
-        className="flex-1 h-11 rounded-lg text-[14px] font-[600] text-white transition-opacity disabled:opacity-40"
-        style={{ background: '#6366F1' }}
+        className="flex-1 h-11 rounded-lg text-[14px] font-[500] text-white transition-opacity disabled:opacity-40"
+        style={{ background: '#059669' }}
       >
         {confirmLabel}
       </button>
@@ -268,7 +268,7 @@ export default function SettingsPage() {
           </div>
           <div>
             <p className="text-[14px] font-[500] text-[#111827]">{w.name}</p>
-            <p className="text-[12px] font-[600]" style={{ color: w.color }}>
+            <p className="text-[12px] font-[500]" style={{ color: w.color }}>
               {formatCurrency(w.balance)}
             </p>
           </div>
@@ -276,7 +276,7 @@ export default function SettingsPage() {
         <div className="flex items-center gap-1">
           <button
             onClick={() => openEditWallet(w)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#6366F1] hover:bg-[#EEF2FF] transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#059669] hover:bg-[#E8FBF4] transition-colors"
           >
             <Pencil size={14} strokeWidth={1.8} />
           </button>
@@ -285,7 +285,7 @@ export default function SettingsPage() {
             disabled={!canDelete}
             className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors disabled:opacity-30"
             style={{ color: '#9CA3AF' }}
-            onMouseEnter={e => { if (canDelete) (e.currentTarget as HTMLElement).style.color = '#DC2626'; (e.currentTarget as HTMLElement).style.background = '#FEF2F2' }}
+            onMouseEnter={e => { if (canDelete) { (e.currentTarget as HTMLElement).style.color = '#EF4444'; (e.currentTarget as HTMLElement).style.background = '#FEF2F2' } }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9CA3AF'; (e.currentTarget as HTMLElement).style.background = '' }}
           >
             <Trash2 size={14} strokeWidth={1.8} />
@@ -312,7 +312,7 @@ export default function SettingsPage() {
         </div>
         <button
           onClick={() => openConfirmDelCat(c)}
-          className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-colors"
+          className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9CA3AF] hover:text-[#EF4444] hover:bg-[#FEF2F2] transition-colors"
         >
           <Trash2 size={14} strokeWidth={1.8} />
         </button>
@@ -325,7 +325,7 @@ export default function SettingsPage() {
       <button
         onClick={onClick}
         className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[13px] font-[500] transition-colors"
-        style={{ color: '#6366F1', background: '#EEF2FF' }}
+        style={{ color: '#059669', background: '#E8FBF4' }}
       >
         <Plus size={14} strokeWidth={2} />
         เพิ่ม
@@ -333,7 +333,6 @@ export default function SettingsPage() {
     )
   }
 
-  // ── wallet form fields (reused in add & edit modals) ────────────────────────
   function WalletFields() {
     return (
       <>
@@ -344,7 +343,7 @@ export default function SettingsPage() {
         >
           <span className="text-[28px]">{wf.icon}</span>
           <div>
-            <p className="text-[15px] font-[600]" style={{ color: wf.color }}>
+            <p className="text-[15px] font-[500]" style={{ color: wf.color }}>
               {wf.name || 'ชื่อกระเป๋า'}
             </p>
             <p className="text-[13px] text-[#6B7280]">
@@ -385,7 +384,6 @@ export default function SettingsPage() {
     )
   }
 
-  // ── category form fields ────────────────────────────────────────────────────
   function CatFields() {
     return (
       <>
@@ -395,7 +393,7 @@ export default function SettingsPage() {
           style={{ background: cf.color + '12', border: `1px solid ${cf.color}40` }}
         >
           <span className="text-[28px]">{cf.icon}</span>
-          <p className="text-[15px] font-[600]" style={{ color: cf.color }}>
+          <p className="text-[15px] font-[500]" style={{ color: cf.color }}>
             {cf.name || 'ชื่อหมวดหมู่'}
           </p>
         </div>
@@ -426,7 +424,7 @@ export default function SettingsPage() {
 
   return (
     <div className="p-8 space-y-8">
-      <h1 className="text-[20px] font-[600] text-[#111827]">ตั้งค่า</h1>
+      <h1 className="text-[20px] font-[500] text-[#111827]">ตั้งค่า</h1>
 
       {/* ── Section 1: Wallets ── */}
       <SectionCard
@@ -472,7 +470,6 @@ export default function SettingsPage() {
 
       {/* ═══ Modals ═══ */}
 
-      {/* Add wallet */}
       <Modal open={addWalletOpen} onClose={() => setAddWalletOpen(false)} title="เพิ่มกระเป๋า">
         {WalletFields()}
         <ModalFooter
@@ -482,7 +479,6 @@ export default function SettingsPage() {
         />
       </Modal>
 
-      {/* Edit wallet */}
       <Modal open={!!editWallet} onClose={() => setEditWallet(null)} title="แก้ไขกระเป๋า">
         {WalletFields()}
         <ModalFooter
@@ -492,11 +488,10 @@ export default function SettingsPage() {
         />
       </Modal>
 
-      {/* Confirm delete wallet */}
       <Modal open={!!confirmDelWallet} onClose={() => setConfirmDelWallet(null)} title="ลบกระเป๋า">
         <div
           className="rounded-xl px-4 py-3 text-[14px]"
-          style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626' }}
+          style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#EF4444' }}
         >
           ลบ <strong>{confirmDelWallet?.name}</strong> จะลบรายการทั้งหมดที่เกี่ยวข้องด้วย ยืนยัน?
         </div>
@@ -507,7 +502,6 @@ export default function SettingsPage() {
         />
       </Modal>
 
-      {/* Add category */}
       <Modal
         open={!!addCatType}
         onClose={() => setAddCatType(null)}
@@ -521,11 +515,10 @@ export default function SettingsPage() {
         />
       </Modal>
 
-      {/* Confirm delete category */}
       <Modal open={!!confirmDelCat} onClose={() => setConfirmDelCat(null)} title="ลบหมวดหมู่">
         <div
           className="rounded-xl px-4 py-3 text-[14px]"
-          style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626' }}
+          style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#EF4444' }}
         >
           ลบหมวดหมู่ <strong>{confirmDelCat?.name}</strong>?
         </div>

@@ -32,14 +32,14 @@ export default function LoginPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center"
-      style={{ background: '#FAFAFA' }}
+      style={{ background: '#F8FAFB' }}
     >
       <div className="w-full max-w-[380px] px-4">
 
         {/* Logo */}
         <div className="text-center mb-8">
           <span className="text-[44px]">💰</span>
-          <h1 className="text-[24px] font-[700] text-[#111827] mt-2">FinTrack</h1>
+          <h1 className="text-[24px] font-[500] text-[#111827] mt-2">FinTrack</h1>
           <p className="text-[14px] text-[#6B7280] mt-1">จัดการการเงินส่วนตัว</p>
         </div>
 
@@ -48,17 +48,17 @@ export default function LoginPage() {
           className="rounded-2xl p-8 space-y-5"
           style={{
             background: '#FFFFFF',
-            border:     '1px solid #E5E7EB',
-            boxShadow:  '0 1px 3px rgba(0,0,0,0.08)',
+            border:     '2px solid #1A1A1A',
+            borderRadius: '10px',
           }}
         >
-          <h2 className="text-[18px] font-[600] text-[#111827]">เข้าสู่ระบบ</h2>
+          <h2 className="text-[18px] font-[500] text-[#111827]">เข้าสู่ระบบ</h2>
 
           <form onSubmit={handleLogin} className="space-y-4">
 
             {/* Email */}
             <div>
-              <label className="text-[12px] font-[500] text-[#6B7280] mb-[6px] block">
+              <label className="text-[12px] font-[400] text-[#6B7280] mb-[6px] block">
                 อีเมล
               </label>
               <input
@@ -67,14 +67,14 @@ export default function LoginPage() {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#6366F1] transition-colors"
+                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#059669] transition-colors"
                 style={{ borderColor: '#E5E7EB' }}
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="text-[12px] font-[500] text-[#6B7280] mb-[6px] block">
+              <label className="text-[12px] font-[400] text-[#6B7280] mb-[6px] block">
                 รหัสผ่าน
               </label>
               <input
@@ -83,7 +83,7 @@ export default function LoginPage() {
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#6366F1] transition-colors"
+                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#059669] transition-colors"
                 style={{ borderColor: '#E5E7EB' }}
               />
             </div>
@@ -92,7 +92,7 @@ export default function LoginPage() {
             {error && (
               <p
                 className="text-[13px] rounded-lg px-3 py-2"
-                style={{ color: '#DC2626', background: '#FEF2F2', border: '1px solid #FECACA' }}
+                style={{ color: '#EF4444', background: '#FEF2F2', border: '1px solid #FECACA' }}
               >
                 {error}
               </p>
@@ -102,8 +102,8 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 rounded-lg text-[14px] font-[600] text-white transition-opacity disabled:opacity-50"
-              style={{ background: '#6366F1' }}
+              className="w-full h-11 rounded-lg text-[14px] font-[500] text-white transition-opacity disabled:opacity-50"
+              style={{ background: '#059669' }}
             >
               {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
             </button>
@@ -120,8 +120,8 @@ export default function LoginPage() {
           {/* Register link */}
           <Link
             href="/register"
-            className="w-full h-11 rounded-lg text-[14px] font-[600] border flex items-center justify-center transition-colors"
-            style={{ color: '#6366F1', borderColor: '#6366F1', background: '#FFFFFF' }}
+            className="w-full h-11 rounded-lg text-[14px] font-[500] border flex items-center justify-center transition-colors"
+            style={{ color: '#059669', borderColor: '#059669', background: '#FFFFFF' }}
           >
             สมัครสมาชิกใหม่
           </Link>

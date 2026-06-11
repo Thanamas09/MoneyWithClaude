@@ -4,16 +4,16 @@ import { useFinance } from '@/lib/FinanceContext'
 import { formatCurrency } from '@/lib/constants'
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <p className="text-[12px] font-[500] text-[#6B7280] mb-[6px]">{children}</p>
+  return <p className="text-[12px] font-[400] text-[#6B7280] mb-[6px]">{children}</p>
 }
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div
-      className="rounded-xl p-5 space-y-4"
-      style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
+      className="p-5 space-y-4"
+      style={{ background: '#FFFFFF', border: '2px solid #1A1A1A', borderRadius: '10px' }}
     >
-      <p className="text-[13px] font-[600] text-[#111827]">{title}</p>
+      <p className="text-[13px] font-[500] text-[#111827]">{title}</p>
       {children}
     </div>
   )
@@ -50,7 +50,7 @@ export default function CalculatorPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-[20px] font-[600] text-[#111827] mb-6">คำนวณเงินคงเหลือ</h1>
+      <h1 className="text-[20px] font-[500] text-[#111827] mb-6">คำนวณเงินคงเหลือ</h1>
 
       <div className="flex gap-6 items-start">
         {/* Left: input sections (2/3) */}
@@ -65,7 +65,7 @@ export default function CalculatorPage() {
                     type="checkbox"
                     checked={selected.has(w.id)}
                     onChange={() => toggleWallet(w.id)}
-                    className="w-4 h-4 rounded accent-[#6366F1]"
+                    className="w-4 h-4 rounded accent-[#059669]"
                   />
                   <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center text-[16px] shrink-0"
@@ -76,7 +76,7 @@ export default function CalculatorPage() {
                   <span className="flex-1 text-[14px] font-[500] text-[#374151] group-hover:text-[#111827] transition-colors">
                     {w.name}
                   </span>
-                  <span className="text-[14px] font-[600]" style={{ color: w.color }}>
+                  <span className="text-[14px] font-[500]" style={{ color: w.color }}>
                     {formatCurrency(w.balance)}
                   </span>
                 </label>
@@ -88,7 +88,7 @@ export default function CalculatorPage() {
               style={{ borderTop: '1px solid #F3F4F6' }}
             >
               <span className="text-[13px] text-[#6B7280]">ยอดรวมที่เลือก</span>
-              <span className="text-[16px] font-[700] text-[#6366F1]">{formatCurrency(selectedTotal)}</span>
+              <span className="text-[16px] font-[500] text-[#059669]">{formatCurrency(selectedTotal)}</span>
             </div>
           </SectionCard>
 
@@ -97,10 +97,10 @@ export default function CalculatorPage() {
             <div className="flex rounded-lg overflow-hidden border" style={{ borderColor: '#E5E7EB' }}>
               <button
                 onClick={() => setAdjustMode('add')}
-                className="flex-1 h-9 text-[13px] font-[600] transition-colors"
+                className="flex-1 h-9 text-[13px] font-[500] transition-colors"
                 style={
                   adjustMode === 'add'
-                    ? { background: '#DCFCE7', color: '#16A34A' }
+                    ? { background: '#E8FBF4', color: '#059669' }
                     : { background: '#F9FAFB', color: '#6B7280' }
                 }
               >
@@ -108,10 +108,10 @@ export default function CalculatorPage() {
               </button>
               <button
                 onClick={() => setAdjustMode('subtract')}
-                className="flex-1 h-9 text-[13px] font-[600] transition-colors"
+                className="flex-1 h-9 text-[13px] font-[500] transition-colors"
                 style={
                   adjustMode === 'subtract'
-                    ? { background: '#FEE2E2', color: '#DC2626' }
+                    ? { background: '#FEE2E2', color: '#EF4444' }
                     : { background: '#F9FAFB', color: '#6B7280' }
                 }
               >
@@ -125,7 +125,7 @@ export default function CalculatorPage() {
                 placeholder="0.00"
                 value={adjustAmount}
                 onChange={e => setAdjustAmount(e.target.value)}
-                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#6366F1] transition-colors"
+                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#059669] transition-colors"
                 style={{ borderColor: '#E5E7EB' }}
               />
             </div>
@@ -143,7 +143,7 @@ export default function CalculatorPage() {
                 placeholder="เช่น 30"
                 value={days}
                 onChange={e => setDays(e.target.value)}
-                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#6366F1] transition-colors"
+                className="w-full h-10 border rounded-lg px-3 text-[14px] text-[#111827] outline-none focus:border-[#059669] transition-colors"
                 style={{ borderColor: '#E5E7EB' }}
               />
             </div>
@@ -153,21 +153,17 @@ export default function CalculatorPage() {
         {/* Right: result card (1/3), sticky */}
         <div className="flex-1 sticky top-8">
           <div
-            className="rounded-xl p-6 space-y-5"
-            style={{
-              background: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-            }}
+            className="p-6 space-y-5"
+            style={{ background: '#FFFFFF', border: '2px solid #1A1A1A', borderRadius: '10px' }}
           >
-            <p className="text-[13px] font-[600] text-[#111827]">ผลลัพธ์</p>
+            <p className="text-[13px] font-[500] text-[#111827]">ผลลัพธ์</p>
 
             {/* Available amount */}
             <div style={{ borderBottom: '1px solid #F3F4F6', paddingBottom: '16px' }}>
-              <p className="text-[12px] font-[500] text-[#6B7280] mb-1">ยอดเงินที่ใช้ได้</p>
+              <p className="text-[12px] font-[400] text-[#6B7280] mb-1">ยอดเงินที่ใช้ได้</p>
               <p
-                className="text-[22px] font-[700]"
-                style={{ color: available > 0 ? '#111827' : '#DC2626' }}
+                className="text-[22px] font-[500]"
+                style={{ color: available > 0 ? '#111827' : '#EF4444' }}
               >
                 {formatCurrency(Math.max(available, 0))}
               </p>
@@ -182,8 +178,8 @@ export default function CalculatorPage() {
             <div className="text-center py-4">
               {perDay !== null ? (
                 <>
-                  <p className="text-[12px] font-[500] text-[#6B7280] mb-2">เฉลี่ยวันละ</p>
-                  <p className="font-[700] text-[#6366F1]" style={{ fontSize: '28px' }}>
+                  <p className="text-[12px] font-[400] text-[#6B7280] mb-2">เฉลี่ยวันละ</p>
+                  <p className="font-[500] text-[#059669]" style={{ fontSize: '28px' }}>
                     {formatCurrency(perDay)}
                   </p>
                   <p className="text-[12px] text-[#9CA3AF] mt-1">ใช้ {numDays} วัน</p>
@@ -191,7 +187,7 @@ export default function CalculatorPage() {
               ) : numDays > 0 && available <= 0 ? (
                 <>
                   <span className="text-[32px]">😔</span>
-                  <p className="text-[14px] font-[500] text-[#DC2626] mt-2">ยอดไม่พอสำหรับ {numDays} วัน</p>
+                  <p className="text-[14px] font-[500] text-[#EF4444] mt-2">ยอดไม่พอสำหรับ {numDays} วัน</p>
                 </>
               ) : (
                 <>

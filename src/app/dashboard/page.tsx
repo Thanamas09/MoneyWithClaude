@@ -11,35 +11,35 @@ function StatCard({
   amount,
   color = '#111827',
   bg = '#FFFFFF',
-  dot,
+  topAccent = '#059669',
 }: {
   label: string
   amount: number
   color?: string
   bg?: string
-  dot?: string
+  topAccent?: string
 }) {
   return (
     <div
-      className="rounded-xl px-6 py-5"
+      className="px-6 py-5"
       style={{
         background: bg,
-        border: '1px solid #E5E7EB',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+        borderTop: `4px solid ${topAccent}`,
+        borderLeft: '2px solid #1A1A1A',
+        borderRight: '2px solid #1A1A1A',
+        borderBottom: '2px solid #1A1A1A',
+        borderRadius: '10px',
       }}
     >
       <div className="flex items-center justify-between mb-2">
         <span
-          className="text-[13px] font-[500] uppercase tracking-[0.05em]"
+          className="text-[13px] font-[400] uppercase tracking-[0.05em]"
           style={{ color: '#6B7280' }}
         >
           {label}
         </span>
-        {dot && (
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: dot }} />
-        )}
       </div>
-      <p className="text-[24px] font-[700]" style={{ color }}>
+      <p className="text-[24px] font-[500]" style={{ color }}>
         {formatCurrency(amount)}
       </p>
     </div>
@@ -69,12 +69,12 @@ export default function DashboardPage() {
         </div>
         <div className="grid grid-cols-3 gap-4">
           {[0, 1, 2].map(i => (
-            <div key={i} className="h-24 rounded-xl bg-[#F3F4F6] animate-pulse" />
+            <div key={i} className="h-24 rounded-[10px] bg-[#F3F4F6] animate-pulse" />
           ))}
         </div>
         <div className="grid grid-cols-3 gap-4">
           {[0, 1, 2].map(i => (
-            <div key={i} className="h-28 rounded-xl bg-[#F3F4F6] animate-pulse" />
+            <div key={i} className="h-28 rounded-[10px] bg-[#F3F4F6] animate-pulse" />
           ))}
         </div>
       </div>
@@ -99,16 +99,16 @@ export default function DashboardPage() {
       {/* Welcome banner — shown once per user */}
       {showWelcome && (
         <div
-          className="flex items-center justify-between rounded-xl px-5 py-4"
-          style={{ background: '#EEF2FF', border: '1px solid #C7D2FE' }}
+          className="flex items-center justify-between rounded-[10px] px-5 py-4"
+          style={{ background: '#E8FBF4', border: '2px solid #1A1A1A' }}
         >
-          <p className="text-[14px] font-[500]" style={{ color: '#4338CA' }}>
+          <p className="text-[14px] font-[500]" style={{ color: '#065F46' }}>
             🎉 ยินดีต้อนรับ <strong>{displayName}</strong>! เริ่มบันทึกรายรับรายจ่ายได้เลย
           </p>
           <button
             onClick={() => setShowWelcome(false)}
             className="w-7 h-7 flex items-center justify-center rounded-lg transition-colors"
-            style={{ color: '#6366F1' }}
+            style={{ color: '#059669' }}
           >
             <X size={15} strokeWidth={2} />
           </button>
@@ -117,7 +117,7 @@ export default function DashboardPage() {
 
       {/* Header */}
       <div>
-        <h1 className="text-[20px] font-[600] text-[#111827]">สรุปการเงิน</h1>
+        <h1 className="text-[20px] font-[500] text-[#111827]">สรุปการเงิน</h1>
         <p className="text-[14px] text-[#6B7280] mt-1">{todayLabel}</p>
       </div>
 
@@ -127,28 +127,28 @@ export default function DashboardPage() {
           label="ยอดรวมทั้งหมด"
           amount={totalBalance}
           color="#111827"
-          dot="#6366F1"
+          topAccent="#059669"
         />
         <StatCard
           label="รายรับเดือนนี้"
           amount={monthIn}
-          color="#16A34A"
-          bg="#F0FDF4"
-          dot="#16A34A"
+          color="#059669"
+          bg="#E8FBF4"
+          topAccent="#059669"
         />
         <StatCard
           label="รายจ่ายเดือนนี้"
           amount={monthOut}
-          color="#DC2626"
+          color="#EF4444"
           bg="#FEF2F2"
-          dot="#DC2626"
+          topAccent="#EF4444"
         />
       </div>
 
       {/* Wallets */}
       <div>
         <p
-          className="text-[13px] font-[500] uppercase tracking-[0.05em] mb-4"
+          className="text-[13px] font-[400] uppercase tracking-[0.05em] mb-4"
           style={{ color: '#6B7280' }}
         >
           กระเป๋าเงิน
@@ -161,7 +161,7 @@ export default function DashboardPage() {
       {/* Today's transactions */}
       <div>
         <p
-          className="text-[13px] font-[500] uppercase tracking-[0.05em] mb-4"
+          className="text-[13px] font-[400] uppercase tracking-[0.05em] mb-4"
           style={{ color: '#6B7280' }}
         >
           รายการวันนี้
@@ -169,8 +169,8 @@ export default function DashboardPage() {
 
         {todayTxs.length === 0 ? (
           <div
-            className="rounded-xl py-16 flex flex-col items-center justify-center gap-3"
-            style={{ border: '1px solid #E5E7EB', background: '#FFFFFF' }}
+            className="py-16 flex flex-col items-center justify-center gap-3"
+            style={{ border: '2px solid #1A1A1A', borderRadius: '10px', background: '#FFFFFF' }}
           >
             <span className="text-[48px]">📭</span>
             <p className="text-[16px] font-[500] text-[#6B7280]">ยังไม่มีรายการ</p>
@@ -178,8 +178,8 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div
-            className="rounded-xl overflow-hidden"
-            style={{ border: '1px solid #E5E7EB', background: '#FFFFFF' }}
+            className="overflow-hidden"
+            style={{ border: '2px solid #1A1A1A', borderRadius: '10px', background: '#FFFFFF' }}
           >
             {todayTxs.map((tx, i) => (
               <TransactionRow

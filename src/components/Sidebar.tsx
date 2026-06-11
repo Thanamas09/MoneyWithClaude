@@ -19,7 +19,6 @@ export default function Sidebar() {
   const router   = useRouter()
 
   const handleLogout = async () => {
-    // Clear all app localStorage keys so the next user starts clean
     Object.keys(localStorage)
       .filter(k => k.startsWith('mwc_'))
       .forEach(k => localStorage.removeItem(k))
@@ -32,7 +31,7 @@ export default function Sidebar() {
   return (
     <aside
       className="fixed left-0 top-0 h-screen w-[240px] bg-white flex flex-col z-40"
-      style={{ borderRight: '1px solid #E5E7EB' }}
+      style={{ borderRight: '2px solid #1A1A1A' }}
     >
       {/* Logo */}
       <div className="px-6 py-6" style={{ borderBottom: '1px solid #E5E7EB' }}>
@@ -50,16 +49,16 @@ export default function Sidebar() {
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 h-11 pr-3 text-[14px] font-medium transition-all duration-150 ${
+              className={`flex items-center gap-3 h-11 pr-3 text-[14px] transition-all duration-150 ${
                 active
-                  ? 'bg-[#EEF2FF] text-[#4F46E5] border-l-[3px] border-[#4F46E5] pl-[9px]'
-                  : 'text-[#6B7280] border-l-[3px] border-transparent pl-[9px] hover:bg-[#F9FAFB] hover:text-[#111827]'
+                  ? 'bg-[#E8FBF4] text-[#059669] font-[500] border-l-[3px] border-[#059669] pl-[9px]'
+                  : 'text-[#6B7280] font-[400] border-l-[3px] border-transparent pl-[9px] hover:bg-[#F9FAFB] hover:text-[#111827]'
               }`}
             >
               <Icon
                 size={18}
                 strokeWidth={1.8}
-                className={active ? 'text-[#4F46E5]' : 'text-[#9CA3AF]'}
+                className={active ? 'text-[#059669]' : 'text-[#9CA3AF]'}
               />
               {label}
             </Link>
@@ -71,7 +70,7 @@ export default function Sidebar() {
       <div className="px-4 py-4 space-y-3" style={{ borderTop: '1px solid #E5E7EB' }}>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-2.5 h-10 px-3 rounded-lg text-[13px] font-[500] transition-colors text-[#6B7280] hover:text-[#DC2626] hover:bg-[#FEF2F2]"
+          className="w-full flex items-center gap-2.5 h-10 px-3 rounded-lg text-[13px] font-[500] transition-colors text-[#6B7280] hover:text-[#EF4444] hover:bg-[#FEF2F2]"
         >
           <LogOut size={16} strokeWidth={1.8} />
           ออกจากระบบ
